@@ -1,0 +1,13 @@
+/* ==========================
+   TAILWIND CONFIG ENTRY
+   ========================== */
+
+/* Base Tailwind */
+@import 'tailwindcss/base';
+
+/* Composants (ShadCN + UI personnalisés) */
+@import 'tailwindcss/components';
+
+/* Utilitaires Tailwind + animations */
+@import 'tailwindcss/utilities';
+@import 'tw-animate-css';
