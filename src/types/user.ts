@@ -1,13 +1,15 @@
+// src/types/user.ts
+
 export enum UserRole {
     ADMIN = 'admin',
-    GESTIONNAIRE = 'gestionnaire',
-    GESTIONNAIRE_OBSERVATEUR = 'gestionnaire_observateur',
-    ABONNE = 'abonne',
+    MANAGER = 'manager',
+    MANAGER_VIEWER = 'manager_viewer',
+    SUBSCRIBER = 'subscriber',
 }
 
 export enum SubscriberCategory {
-    ETUDIANT = 'étudiant',
-    CHERCHEUR = 'chercheur',
+    STUDENT = 'student',
+    RESEARCHER = 'researcher',
 }
 
 export interface User {

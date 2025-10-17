@@ -1,40 +1,41 @@
+/* src/styles/theme.css */
 :root {
     /* Couleurs principales (charte UPN) */
-    --color-primary: #60a5fa; /* Bleu ciel (UPN) */
-    --color-primary-dark: #3b82f6; /* Bleu plus profond */
-    --color-secondary: #facc15; /* Jaune UPN */
-    --color-secondary-dark: #eab308; /* Jaune chaud */
+    --color-primary: #60a5fa;
+    --color-primary-dark: #3b82f6;
+    --color-secondary: #facc15;
+    --color-secondary-dark: #eab308;
 
     /* États */
-    --color-success: #22c55e; /* Vert succès */
-    --color-warning: #fbbf24; /* Jaune alerte */
-    --color-danger: #ef4444; /* Rouge erreur */
+    --color-success: #22c55e;
+    --color-warning: #fbbf24;
+    --color-danger: #ef4444;
 
     /* Fond & texte (mode clair) */
-    --background: #f9fafb; /* Arrière-plan clair */
-    --surface: #ffffff; /* Fond des cartes/formulaires */
-    --text: #1e293b; /* Texte principal */
-    --text-secondary: #475569; /* Texte secondaire */
-    --border: #e2e8f0; /* Bordures */
-    --ring: #3b82f6; /* Couleur d’accentuation focus */
+    --background: #f9fafb;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #475569;
+    --border: #e2e8f0;
+    --ring: #3b82f6;
 
-    /* Rayons de bordure (synchronisés avec Tailwind) */
-    --radius-sm: 0.375rem; /* 6px */
-    --radius-md: 0.5rem; /* 8px */
-    --radius-lg: 0.75rem; /* 12px */
-    --radius-xl: 1rem; /* 16px */
+    /* Rayons de bordure */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
 
     /* Typographie */
     --font-sans: 'Inter', 'Roboto', sans-serif;
 }
 
-/*  Mode sombre */
+/* 🌙 Mode sombre */
 :root.dark,
 .dark {
-    --background: #0f172a; /* Fond sombre */
-    --surface: #1e293b; /* Surface douce */
-    --text: #f8fafc; /* Texte clair */
-    --text-secondary: #cbd5e1; /* Texte secondaire clair */
-    --border: #334155; /* Bordure sombre */
-    --ring: #60a5fa; /* Accent focus bleu clair */
+    --background: #0f172a;
+    --surface: #1e293b;
+    --text: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --border: #334155;
+    --ring: #60a5fa;
 }

@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
-import { theme } from '@/constants/theme'
 import { toast } from 'sonner'
 
 export function LoginForm() {
@@ -15,9 +14,6 @@ export function LoginForm() {
     const [form, setForm] = useState({ email: '', password: '' })
     const [showPassword, setShowPassword] = useState(false)
     const [errors, setErrors] = useState<{ email?: string; password?: string }>({})
-
-    const baseInputClass =
-        'border p-2 w-full rounded-lg focus:ring-2 transition-all duration-200 border-[var(--border)] focus:ring-[var(--color-primary)]'
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -27,6 +23,7 @@ export function LoginForm() {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         const newErrors: typeof errors = {}
+
         if (!form.email.trim()) newErrors.email = 'Veuillez entrer votre adresse e-mail.'
         if (!form.password.trim()) newErrors.password = 'Veuillez entrer votre mot de passe.'
 
@@ -41,9 +38,11 @@ export function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            {/* Email */}
+            {/*  Email */}
             <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-text">
+                    Adresse e-mail
+                </Label>
                 <Input
                     id="email"
                     name="email"
@@ -51,15 +50,17 @@ export function LoginForm() {
                     placeholder="exemple@upn.cd"
                     value={form.email}
                     onChange={handleChange}
-                    className={baseInputClass}
+                    className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
                     required
                 />
-                {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+                {errors.email && <p className="text-sm text-danger">{errors.email}</p>}
             </div>
 
             {/* Mot de passe */}
-            <div className="space-y-2 relative">
-                <Label htmlFor="password">Mot de passe</Label>
+            <div className="space-y-2">
+                <Label htmlFor="password" className="text-text">
+                    Mot de passe
+                </Label>
                 <div className="relative">
                     <Input
                         id="password"
@@ -68,25 +69,25 @@ export function LoginForm() {
                         placeholder="••••••••"
                         value={form.password}
                         onChange={handleChange}
-                        className={`${baseInputClass} pr-10`}
+                        className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200 pr-10"
                         required
                     />
                     <button
                         type="button"
                         onClick={() => setShowPassword((prev) => !prev)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-secondary)] hover:text-[var(--text)]"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-primary transition-colors"
                     >
                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                     </button>
                 </div>
-                {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+                {errors.password && <p className="text-sm text-danger">{errors.password}</p>}
             </div>
 
-            {/* Lien mot de passe oublié */}
+            {/*  Lien mot de passe oublié */}
             <div className="text-right">
                 <Link
                     href="/auth/forgot-password"
-                    className="text-sm font-medium text-[var(--color-primary)] hover:underline"
+                    className="text-sm font-medium text-primary hover:underline"
                 >
                     Mot de passe oublié ?
                 </Link>
@@ -96,17 +97,12 @@ export function LoginForm() {
             <Button
                 type="submit"
                 disabled={isLoggingIn}
-                style={{
-                    backgroundColor: theme.colors.primary,
-                    borderRadius: theme.radius.lg,
-                    color: theme.colors.surface,
-                    boxShadow: theme.shadows.button,
-                }}
-                className="w-full flex items-center justify-center gap-2 hover:brightness-105 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-lg py-2 shadow-button transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isLoggingIn ? (
                     <>
-                        <Loader2 size={18} className="animate-spin" /> Connexion...
+                        <Loader2 size={18} className="animate-spin" />
+                        Connexion...
                     </>
                 ) : (
                     'Se connecter'

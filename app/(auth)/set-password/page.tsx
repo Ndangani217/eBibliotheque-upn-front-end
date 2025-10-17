@@ -8,7 +8,6 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { theme } from '@/constants/theme'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { useSetPassword } from '@/features/auth/hooks'
 import { useState } from 'react'
@@ -55,77 +54,79 @@ export default function SetPasswordPage() {
                 newPassword: data.password,
                 confirmPassword: data.confirmPassword,
             })
-            toast.success('Mot de passe défini avec succès ✅')
+            toast.success('Mot de passe défini avec succès')
             router.push('/login')
         } catch (error) {
             console.error(error)
-            toast.error('Erreur lors de la définition du mot de passe ❌')
+            toast.error('Erreur lors de la définition du mot de passe')
         }
     }
 
     return (
-        <main className="min-h-screen flex items-center justify-center bg-background dark:bg-gray-950 px-4">
-            <section className="w-full max-w-md bg-white dark:bg-gray-900 shadow-lg rounded-2xl p-8 space-y-6 border border-gray-100 dark:border-gray-800">
+        <main className="min-h-screen flex items-center justify-center bg-background px-4 transition-colors duration-300">
+            <section className="w-full max-w-md bg-surface shadow-card rounded-xl p-8 space-y-6 border border-border transition-colors duration-300">
+                {/* 🔷 En-tête */}
                 <div className="flex flex-col items-center gap-2 text-center">
                     <img src="/logo-upn.png" alt="Logo UPN" className="w-16 h-16" />
-                    <h1 className="text-2xl font-semibold">Définir un mot de passe</h1>
-                    <p className="text-sm text-gray-500">
+                    <h1 className="text-2xl font-semibold text-text">Définir un mot de passe</h1>
+                    <p className="text-sm text-text-secondary">
                         Créez votre mot de passe pour activer votre compte
                     </p>
                 </div>
 
+                {/* 🧩 Formulaire */}
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
                     {/* Mot de passe */}
                     <div className="space-y-2">
-                        <Label htmlFor="password">Mot de passe</Label>
+                        <Label htmlFor="password" className="text-text">
+                            Mot de passe
+                        </Label>
                         <div className="relative">
                             <Input
                                 id="password"
                                 type={show ? 'text' : 'password'}
                                 placeholder="••••••••"
                                 {...register('password')}
-                                className="border p-2 w-full rounded-lg focus:ring-2 transition-all duration-200 pr-10"
+                                className="border border-border bg-surface text-text w-full rounded-md focus:ring-2 focus:ring-primary focus:outline-none pr-10"
                             />
                             <button
                                 type="button"
                                 onClick={() => setShow((s) => !s)}
-                                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+                                className="absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary hover:text-primary transition-colors"
                             >
                                 {show ? <EyeOff size={18} /> : <Eye size={18} />}
                             </button>
                         </div>
                         {errors.password && (
-                            <p className="text-sm text-red-500">{errors.password.message}</p>
+                            <p className="text-sm text-danger">{errors.password.message}</p>
                         )}
                     </div>
 
                     {/* Confirmation */}
                     <div className="space-y-2">
-                        <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                        <Label htmlFor="confirmPassword" className="text-text">
+                            Confirmer le mot de passe
+                        </Label>
                         <Input
                             id="confirmPassword"
                             type="password"
                             placeholder="••••••••"
                             {...register('confirmPassword')}
-                            className="border p-2 w-full rounded-lg focus:ring-2 transition-all duration-200"
+                            className="border border-border bg-surface text-text w-full rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
                         />
                         {errors.confirmPassword && (
-                            <p className="text-sm text-red-500">{errors.confirmPassword.message}</p>
+                            <p className="text-sm text-danger">{errors.confirmPassword.message}</p>
                         )}
                     </div>
 
+                    {/* ✅ Bouton d’envoi */}
                     <Button
                         type="submit"
                         disabled={isPending}
-                        style={{
-                            backgroundColor: theme.colors.primary,
-                            borderRadius: theme.radius.lg,
-                            color: theme.colors.surface,
-                        }}
-                        className="w-full flex items-center justify-center gap-2"
+                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-lg py-2 shadow-button transition-all duration-200"
                     >
                         {isPending ? (
-                            <Loader2 className="animate-spin" />
+                            <Loader2 className="animate-spin w-5 h-5" />
                         ) : (
                             'Définir le mot de passe'
                         )}
