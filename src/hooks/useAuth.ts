@@ -1,6 +1,6 @@
 'use client'
 
-import { useAuthStore } from '@/stores/authStore'
+import { useAuthStore } from '@/features/auth'
 import api from '@/services/api'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
@@ -40,7 +40,7 @@ export function useAuth() {
     // Connexion
     const loginMutation = useMutation<AuthResponse, AxiosError<ApiError>, LoginPayload>({
         mutationFn: async (credentials) => {
-            const { data } = await api.post<AuthResponse>('/auth/login', credentials)
+            const { data } = await api.post<AuthResponse>('/login', credentials)
             return data
         },
         onSuccess: (data) => {

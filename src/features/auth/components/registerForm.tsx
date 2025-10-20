@@ -53,7 +53,7 @@ export default function RegisterFormAbonne() {
             lastName: '',
             email: '',
             phoneNumber: '',
-            category: 'étudiant',
+            category: 'student',
             matricule: '',
         },
     })
@@ -72,7 +72,7 @@ export default function RegisterFormAbonne() {
             category: data.category,
         }
 
-        console.log('📤 Données envoyées :', payload)
+        console.log('Données envoyées :', payload)
 
         registerUser(payload, {
             onSuccess: () => {

@@ -23,32 +23,32 @@ export default function Header({ onMenuClick }: HeaderProps) {
     const { user } = useAuthStore()
     const logoutMutation = useLogout()
 
-    /** Helper pour traduire le rôle utilisateur */
+    /** Traduction du rôle utilisateur */
     const roleLabel =
         user?.role === UserRole.ADMIN
-            ? 'Administrator'
+            ? 'Administrateur'
             : user?.role === UserRole.MANAGER
             ? 'Manager'
             : user?.role === UserRole.MANAGER_VIEWER
-            ? 'Manager (Viewer)'
-            : 'Subscriber'
+            ? 'Manager (Vue)'
+            : 'Abonné'
 
     return (
-        <header className="sticky top-0 z-50 flex items-center justify-between bg-surface/80 backdrop-blur-md border-b border-border h-16 px-4 shadow-card transition-colors duration-300">
-            {/* Menu mobile */}
+        <header className="sticky top-0 z-40 flex items-center justify-between bg-surface/80 backdrop-blur-md border-b border-border h-16 px-4 shadow-card transition-colors duration-300">
+            {/* Bouton menu mobile */}
             <Button
                 variant="ghost"
                 size="icon"
                 className="lg:hidden hover:bg-primary/10 text-primary"
                 onClick={onMenuClick}
-                aria-label="Open sidebar"
+                aria-label="Ouvrir le menu"
             >
                 <Menu className="w-5 h-5" />
             </Button>
 
             {/* Titre principal */}
             <div className="flex flex-col leading-tight">
-                <h1 className="text-lg font-semibold text-primary">UPN Library</h1>
+                <h1 className="text-lg font-semibold text-primary">Bibliothèque UPN</h1>
                 {user && (
                     <span className="text-xs text-text-secondary">
                         {user.firstName} {user.lastName} · {roleLabel}
@@ -56,9 +56,9 @@ export default function Header({ onMenuClick }: HeaderProps) {
                 )}
             </div>
 
-            {/* Notifications + utilisateur */}
+            {/* Notifications + Profil */}
             <div className="flex items-center gap-3">
-                {/*  Notifications */}
+                {/* Notifications */}
                 <Button
                     variant="ghost"
                     size="icon"
@@ -70,7 +70,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
                     </span>
                 </Button>
 
-                {/* Utilisateur */}
+                {/* Profil utilisateur */}
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button
@@ -90,25 +90,26 @@ export default function Header({ onMenuClick }: HeaderProps) {
                         </Button>
                     </DropdownMenuTrigger>
 
+                    {/* Menu déroulant */}
                     <DropdownMenuContent className="w-48" align="end" sideOffset={6}>
                         <DropdownMenuLabel className="text-sm text-text font-medium">
-                            My Account
+                            Mon compte
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem className="text-text hover:text-primary">
-                            Profile
+                            Profil
                         </DropdownMenuItem>
                         <DropdownMenuItem className="text-text hover:text-primary">
-                            Settings
+                            Paramètres
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
                             onClick={() => logoutMutation.mutate()}
                             disabled={logoutMutation.isPending}
-                            className="text-danger hover:text-danger/80"
+                            className="text-danger hover:text-danger/80 flex items-center"
                         >
                             <LogOut className="w-4 h-4 mr-2" />
-                            {logoutMutation.isPending ? 'Logging out…' : 'Logout'}
+                            {logoutMutation.isPending ? 'Déconnexion…' : 'Se déconnecter'}
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

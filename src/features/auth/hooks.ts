@@ -1,12 +1,12 @@
 'use client'
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import type { AxiosError } from 'axios'
 import api from '@/services/api'
-import { useAuthStore } from '@/features/auth/store'
-import type { User } from '@/types/user'
+import { useAuthStore } from '@/features/auth'
+import type { User, UserRole, SubscriberCategory } from '@/types/user'
 
 interface ApiError {
     message?: string
@@ -27,7 +27,7 @@ interface RegisterSubscriberPayload {
     lastName: string
     email: string
     phoneNumber: string
-    category: 'étudiant' | 'chercheur'
+    category: SubscriberCategory
 }
 
 interface ForgotPasswordPayload {
@@ -44,7 +44,7 @@ export interface CreateAdminUserPayload {
     firstName: string
     lastName: string
     email: string
-    role: 'admin' | 'gestionnaire' | 'gestionnaire_observateur'
+    role: UserRole
 }
 
 export function useLogin() {
@@ -53,11 +53,17 @@ export function useLogin() {
 
     return useMutation<AuthResponse, AxiosError<ApiError>, LoginPayload>({
         mutationFn: async (payload) => {
-            const { data } = await api.post<AuthResponse>('/auth/login', payload)
-            return data
+            const { data } = await api.post('/auth/login', payload)
+            const token = data?.data?.accessToken?.token
+            const user = data?.data?.user
+            if (!token || !user) {
+                throw new Error('Token or user missing in response')
+            }
+            return { user, token }
         },
-        onSuccess: (data) => {
-            setAuth(data.user, data.token)
+        onSuccess: ({ user, token }) => {
+            console.log('Token reçu:', token)
+            setAuth(user, token)
             toast.success('Connexion réussie')
             router.push('/dashboard')
         },
@@ -68,21 +74,30 @@ export function useLogin() {
 }
 
 export function useLogout() {
-    const queryClient = useQueryClient()
-    const clearAuth = useAuthStore((s) => s.logout)
     const router = useRouter()
-
+    const { logout } = useAuthStore()
     return useMutation<void, AxiosError<ApiError>, void>({
         mutationFn: async () => {
-            await api.delete('/auth/logout')
+            try {
+                await api.delete('/auth/logout')
+            } catch (err) {
+                console.warn('Déconnexion backend échouée (token expiré ?), nettoyage local.')
+            }
         },
         onSuccess: () => {
-            clearAuth()
-            queryClient.clear()
-            toast.success('Déconnexion réussie 👋')
+            logout()
+            toast.success('Déconnexion réussie')
             router.push('/login')
         },
-        onError: () => toast.error('Erreur lors de la déconnexion.'),
+        onError: (error) => {
+            console.error('Erreur de déconnexion :', error)
+            logout()
+            toast.error(
+                error.response?.data?.message ||
+                    'Erreur lors de la déconnexion. Session terminée localement.',
+            )
+            router.push('/login')
+        },
     })
 }
 
