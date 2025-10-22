@@ -29,7 +29,7 @@
     --font-sans: 'Inter', 'Roboto', sans-serif;
 }
 
-/* 🌙 Mode sombre */
+/* Mode sombre */
 :root.dark,
 .dark {
     --background: #0f172a;

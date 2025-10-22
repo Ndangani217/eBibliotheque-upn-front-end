@@ -15,7 +15,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="fr" suppressHydrationWarning>
             <head>
-                {/* Fallback au cas où metadata ne s'applique pas */}
                 <link rel="icon" href="/logo-upn.png" />
                 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
             </head>

@@ -24,7 +24,7 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
     const { user } = useAuthStore()
 
     const baseMenu = [
-        { label: 'Dashboard', href: '/dashboard/dashboard', icon: Home },
+        { label: 'Dashboard', href: '/dashboard', icon: Home },
         { label: 'Subscriptions', href: '/dashboard/subscriptions', icon: BookOpen },
         { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
         { label: 'Notifications', href: '/notifications', icon: Bell },
@@ -58,7 +58,7 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
                     </span>
                 </div>
 
-                {/* ✅ Bouton animé (rotation + scale + fade) */}
+                {/* Bouton animé (rotation + scale + fade) */}
                 <motion.div
                     initial={{ rotate: -180, scale: 0.5, opacity: 0 }}
                     animate={{ rotate: 0, scale: 1, opacity: 1 }}

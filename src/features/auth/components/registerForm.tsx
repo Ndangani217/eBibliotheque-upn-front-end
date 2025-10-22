@@ -16,6 +16,7 @@ import {
 import { Loader2 } from 'lucide-react'
 import { theme } from '@/constants/theme'
 import { useAuth } from '../hooks'
+import { SubscriberCategory } from '@/types/user'
 
 /* -----------------------------
  * Validation du formulaire
@@ -27,7 +28,7 @@ const schema = z.object({
     phoneNumber: z
         .string()
         .regex(/^(?:\+243|0)?[0-9]{9}$/, { message: 'Numéro invalide (+243 ou 0...)' }),
-    category: z.enum(['étudiant', 'chercheur'], { message: 'Catégorie requise' }),
+    category: z.enum(['student', 'researcher'], { message: 'Catégorie requise' }),
     matricule: z.string().optional(),
 })
 
@@ -60,24 +61,18 @@ export default function RegisterFormAbonne() {
 
     const category = watch('category')
 
-    /* -----------------------------
-     * Soumission via le hook useAuth
-     * ----------------------------- */
     const onSubmit = (data: FormData) => {
         const payload = {
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
             phoneNumber: data.phoneNumber,
-            category: data.category,
+            category: data.category as SubscriberCategory,
+            matricule: data.category === 'student' ? data.matricule : null,
         }
 
-        console.log('Données envoyées :', payload)
-
         registerUser(payload, {
-            onSuccess: () => {
-                reset()
-            },
+            onSuccess: () => reset(),
         })
     }
 
@@ -147,14 +142,14 @@ export default function RegisterFormAbonne() {
                 <Label htmlFor="category">Catégorie</Label>
                 <Select
                     value={category}
-                    onValueChange={(val) => setValue('category', val as 'étudiant' | 'chercheur')}
+                    onValueChange={(val) => setValue('category', val as 'student' | 'researcher')}
                 >
                     <SelectTrigger className={baseInputClass}>
                         <SelectValue placeholder="Choisir une catégorie" />
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="étudiant">Étudiant</SelectItem>
-                        <SelectItem value="chercheur">Chercheur</SelectItem>
+                        <SelectItem value="student">Étudiant</SelectItem>
+                        <SelectItem value="researcher">Chercheur</SelectItem>
                     </SelectContent>
                 </Select>
                 {errors.category && (
@@ -163,7 +158,7 @@ export default function RegisterFormAbonne() {
             </div>
 
             {/* Matricule (si étudiant) */}
-            {category === 'étudiant' && (
+            {category === 'student' && (
                 <div className="space-y-1">
                     <Label htmlFor="matricule">Matricule</Label>
                     <Input
@@ -175,12 +170,10 @@ export default function RegisterFormAbonne() {
                 </div>
             )}
 
-            {/* Info */}
             <p className="text-sm text-gray-500 text-center">
                 Un lien sera envoyé à votre e-mail pour définir votre mot de passe.
             </p>
 
-            {/* Bouton */}
             <Button
                 type="submit"
                 disabled={isRegistering}
