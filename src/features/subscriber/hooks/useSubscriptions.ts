@@ -1,83 +1,68 @@
 'use client'
 
 import { useAuthStore } from '@/features/auth'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import api from '@/services/api'
-import { useRouter } from 'next/navigation'
-import type { AxiosError } from 'axios'
+import type { AxiosError, AxiosResponse } from 'axios'
 
-interface SubscriptionType {
-    id: number
-    category: string
-    duration: number
-    price: number
-    devise: string
-}
-
-interface ApiError {
-    status: string
-    message: string
-}
-
-interface GenerateVoucherPayload {
+export interface GenerateVoucherPayload {
     category: string
     duration: number
     bank?: string
 }
 
-/**
- * Liste les formules disponibles selon la catégorie de l’utilisateur
- */
-export function useSubscriptions() {
-    const { user } = useAuthStore()
-
-    return useQuery<SubscriptionType[], AxiosError<ApiError>>({
-        queryKey: ['subscription-types', user?.category],
-        queryFn: async () => {
-            const { data } = await api.get(`/payments/subscription-types/${user?.category}`)
-            return data
-        },
-        enabled: !!user?.category,
-        meta: {
-            handleError: (error: AxiosError<ApiError>) => {
-                const message =
-                    error.response?.data?.message ??
-                    'Erreur lors du chargement des formules d’abonnement.'
-                toast.error(message)
-            },
-        },
-    })
+export interface ApiError {
+    status: string
+    message: string
 }
 
-/**
- * Génère un bon de paiement PDF (et ouvre le PDF automatiquement)
- */
 export function useGenerateVoucher() {
-    const router = useRouter()
+    const token = useAuthStore((state) => state.token)
+    const isLoadingUser = useAuthStore((state) => state.loading)
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
-    return useMutation({
-        mutationFn: async (payload: GenerateVoucherPayload) => {
-            const { data } = await api.post('/payments/vouchers', payload, {
-                responseType: 'blob',
-            })
-            // Téléchargement automatique du PDF
-            const blob = new Blob([data], { type: 'application/pdf' })
+    return useMutation<boolean, AxiosError<ApiError>, GenerateVoucherPayload>({
+        mutationFn: async (payload) => {
+            if (isLoadingUser) throw new Error('Chargement du compte en cours...')
+            if (!isAuthenticated || !token) throw new Error('Utilisateur non authentifié.')
+
+            console.log('🔑 Token:', token)
+            console.log('📤 Payload:', payload)
+
+            const response: AxiosResponse<Blob> = await api.post(
+                '/payments/vouchers/generate',
+                payload,
+                {
+                    responseType: 'blob',
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'application/pdf',
+                    },
+                },
+            )
+
+            if (response.status !== 200) throw new Error('Erreur côté serveur.')
+
+            // ✅ Téléchargement automatique du fichier
+            const blob = new Blob([response.data], { type: 'application/pdf' })
             const url = window.URL.createObjectURL(blob)
-            window.open(url)
+            const link = document.createElement('a')
+            link.href = url
+            link.download = `bon_de_paiement_${payload.duration}mois.pdf`
+            document.body.appendChild(link)
+            link.click()
+            link.remove()
+            window.URL.revokeObjectURL(url)
+
+            toast.success('✅ Bon de paiement généré avec succès !')
+            return true
         },
-        meta: {
-            handleError: (error: AxiosError<ApiError>) => {
-                const message =
-                    error.response?.data?.message ??
-                    'Erreur lors de la génération du bon de paiement.'
-                toast.error(message)
-            },
-        },
-        //gestion manuelle du succès (supportée en v5)
-        onSuccess: () => {
-            toast.success('Bon de paiement généré avec succès.')
-            router.push('/subscriber/payments')
+
+        onError: (error) => {
+            const message = error.response?.data?.message || error.message
+            toast.error(`Erreur génération PDF: ${message}`)
+            console.error('❌ useGenerateVoucher error:', error)
         },
     })
 }

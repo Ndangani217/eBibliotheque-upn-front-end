@@ -25,9 +25,7 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
 
     const baseMenu = [
         { label: 'Dashboard', href: '/dashboard', icon: Home },
-        { label: 'Subscriptions', href: '/dashboard/subscriptions', icon: BookOpen },
-        { label: 'Payments', href: '/dashboard/payments', icon: CreditCard },
-        { label: 'Notifications', href: '/notifications', icon: Bell },
+        { label: 'Card', href: '/dashboard/subscriber/card', icon: CreditCard },
     ]
 
     const managerExtra = [{ label: 'Cards', href: '/dashboard/manager/cards', icon: Printer }]

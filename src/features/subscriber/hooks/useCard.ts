@@ -25,20 +25,19 @@ interface ApiError {
 /**
  * Récupère la carte active de l’abonné connecté
  */
+
 export function useCard() {
-    return useQuery<SubscriptionCard, AxiosError<ApiError>>({
+    return useQuery<SubscriptionCard | null, AxiosError<ApiError>>({
         queryKey: ['subscription-card'],
         queryFn: async () => {
-            const { data } = await api.get('/payments/cards/active')
-            return data
-        },
-        meta: {
-            handleError: (error: AxiosError<ApiError>) => {
-                // Déclenche le toast automatiquement via le provider global
-                const message =
-                    error.response?.data?.message ?? 'Erreur lors du chargement de la carte.'
-                throw new Error(message)
-            },
+            try {
+                const { data } = await api.get('/payments/cards/active')
+                return data
+            } catch (error: any) {
+                // ✅ Si le backend renvoie 404, on retourne null (pas d’erreur critique)
+                if (error.response?.status === 404) return null
+                throw error
+            }
         },
     })
 }
