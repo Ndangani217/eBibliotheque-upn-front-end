@@ -14,15 +14,28 @@ export default function PaymentHistory() {
     }
 
     const getBadgeStyle = (status: string) => {
-        switch (status) {
-            case 'payé':
+        switch (status.toLowerCase()) {
+            case 'paye':
                 return 'bg-green-500 text-white'
             case 'en_attente':
                 return 'bg-yellow-400 text-gray-900'
-            case 'expiré':
+            case 'expire':
                 return 'bg-red-500 text-white'
             default:
                 return 'bg-gray-300 text-gray-800'
+        }
+    }
+
+    const translateStatus = (status: string) => {
+        switch (status.toLowerCase()) {
+            case 'paye':
+                return 'Payé'
+            case 'en_attente':
+                return 'En attente'
+            case 'expire':
+                return 'Expiré'
+            default:
+                return status
         }
     }
 
@@ -46,27 +59,19 @@ export default function PaymentHistory() {
                                 key={v.id}
                                 className="border-b border-border hover:bg-gray-50 dark:hover:bg-darkSurface transition"
                             >
-                                {/* Correction : référence snake_case */}
                                 <td className="p-3">{v.reference_code}</td>
-
                                 <td className="p-3 font-semibold">{v.amount} USD</td>
-
-                                {/* Duration si dispo sinon — */}
                                 <td className="p-3">{v.duration ?? '—'} mois</td>
-
-                                {/* Badge avec classes dynamiques */}
                                 <td className="p-3">
                                     <Badge
                                         variant="secondary"
                                         className={`${getBadgeStyle(v.status)} capitalize`}
                                     >
-                                        {v.status}
+                                        {translateStatus(v.status)}
                                     </Badge>
                                 </td>
-
-                                {/* Bouton téléchargement reçu */}
                                 <td className="p-3 text-center">
-                                    {v.status === 'payé' && (
+                                    {v.status?.toLowerCase() === 'paye' && (
                                         <Button
                                             variant="outline"
                                             size="sm"

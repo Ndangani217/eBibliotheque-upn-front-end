@@ -1,6 +1,6 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import api from '@/services/api'
 import type { AxiosError } from 'axios'
@@ -33,5 +33,20 @@ export function usePayments() {
             }
             return vouchers
         },
+    })
+}
+
+export function useValidatePayment() {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (id: number) => {
+            await api.post(`/payments/vouchers/${id}/validate`)
+        },
+        onSuccess: () => {
+            toast.success('Paiement validé et carte générée !')
+            queryClient.invalidateQueries({ queryKey: ['subscription-card'] })
+        },
+        onError: () => toast.error('Erreur lors de la validation du paiement.'),
     })
 }

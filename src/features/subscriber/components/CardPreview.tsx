@@ -1,8 +1,8 @@
 'use client'
 
-import { useCard, downloadCard } from '@/features/subscriber/hooks/useCard'
-import { Button } from '@/components/ui/button'
-import { Download } from 'lucide-react'
+import { QRCodeCanvas } from 'qrcode.react'
+import { formatDate } from '@/constants/formatDate'
+import { useCard } from '@/features/subscriber/hooks/useCard'
 import { typography } from '@/constants/theme'
 
 export default function CardPreview() {
@@ -20,23 +20,68 @@ export default function CardPreview() {
         )
     }
 
+    const isActive = card.is_active
+    const verifyUrl = `https://ebibliotheque-upn.cd/verify/${card.unique_code}`
+
     return (
-        <section className="flex flex-col items-center bg-surface border border-border rounded-xl shadow-card p-8 space-y-4 mt-8">
-            <img
-                src={card.qr_code_path}
-                alt="QR Code de la carte"
-                className="w-48 h-48 rounded-lg border border-border"
-            />
-            <h2 className={`${typography.h2} text-primary`}>Carte d’abonnement</h2>
-            <p className={`${typography.small} text-text-secondary text-center`}>
-                Valide du {card.subscription?.start_date} au {card.subscription?.end_date}
-            </p>
-            <Button
-                onClick={() => downloadCard(card.id)}
-                className="form-button flex items-center gap-2 w-auto"
+        <section className="flex justify-center mt-10 px-4">
+            <div
+                className={`
+          relative w-full max-w-sm rounded-3xl shadow-xl overflow-hidden
+          bg-gradient-to-br from-blue-500/90 to-sky-400/80 text-white
+          p-6 sm:p-8 transform transition-all hover:scale-[1.02]
+        `}
             >
-                <Download size={18} /> Télécharger la carte
-            </Button>
+                {/* En-tête */}
+                <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-wide mb-4 drop-shadow">
+                    Carte d’abonnement
+                </h2>
+
+                {/* QR Code dynamique */}
+                <div className="flex justify-center">
+                    <div className="bg-white p-2 rounded-xl shadow-md">
+                        <QRCodeCanvas
+                            value={verifyUrl}
+                            size={160}
+                            bgColor="#FFFFFF"
+                            fgColor="#000000"
+                            level="H"
+                            includeMargin={true}
+                        />
+                    </div>
+                </div>
+
+                {/* Infos principales */}
+                <div className="text-center mt-5 space-y-1">
+                    <p className="uppercase font-bold tracking-wider text-lg sm:text-xl">
+                        {card.subscription?.category}
+                    </p>
+                    <p className="text-sm sm:text-base">
+                        Valide du{' '}
+                        <span className="font-semibold">
+                            {formatDate(card.subscription?.start_date)}
+                        </span>{' '}
+                        au{' '}
+                        <span className="font-semibold">
+                            {formatDate(card.subscription?.end_date)}
+                        </span>
+                    </p>
+                </div>
+
+                {/* Statut */}
+                <div
+                    className={`mt-6 mx-auto w-fit px-5 py-2 rounded-full font-medium text-sm sm:text-base ${
+                        isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'
+                    }`}
+                >
+                    Statut : {isActive ? 'Active' : 'Inactive'}
+                </div>
+
+                {/* Bas de carte */}
+                <div className="absolute bottom-3 right-4 text-xs text-white/80">
+                    © Bibliothèque UPN
+                </div>
+            </div>
         </section>
     )
 }

@@ -47,7 +47,7 @@ export function LoginForm() {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="exemple@upn.cd"
+                    placeholder="upnrdc@upn.ac.cd"
                     value={form.email}
                     onChange={handleChange}
                     className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
@@ -86,7 +86,7 @@ export function LoginForm() {
             {/*  Lien mot de passe oublié */}
             <div className="text-right">
                 <Link
-                    href="/auth/forgot-password"
+                    href="/forgot-password"
                     className="text-sm font-medium text-primary hover:underline"
                 >
                     Mot de passe oublié ?

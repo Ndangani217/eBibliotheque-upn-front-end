@@ -7,7 +7,6 @@ import api from '@/services/api'
 import type { AxiosError, AxiosResponse } from 'axios'
 
 export interface GenerateVoucherPayload {
-    category: string
     duration: number
     bank?: string
 }
@@ -27,9 +26,6 @@ export function useGenerateVoucher() {
             if (isLoadingUser) throw new Error('Chargement du compte en cours...')
             if (!isAuthenticated || !token) throw new Error('Utilisateur non authentifié.')
 
-            console.log('🔑 Token:', token)
-            console.log('📤 Payload:', payload)
-
             const response: AxiosResponse<Blob> = await api.post(
                 '/payments/vouchers/generate',
                 payload,
@@ -44,7 +40,6 @@ export function useGenerateVoucher() {
 
             if (response.status !== 200) throw new Error('Erreur côté serveur.')
 
-            // ✅ Téléchargement automatique du fichier
             const blob = new Blob([response.data], { type: 'application/pdf' })
             const url = window.URL.createObjectURL(blob)
             const link = document.createElement('a')
@@ -55,14 +50,14 @@ export function useGenerateVoucher() {
             link.remove()
             window.URL.revokeObjectURL(url)
 
-            toast.success('✅ Bon de paiement généré avec succès !')
+            toast.success('Bon de paiement généré avec succès !')
             return true
         },
 
         onError: (error) => {
             const message = error.response?.data?.message || error.message
             toast.error(`Erreur génération PDF: ${message}`)
-            console.error('❌ useGenerateVoucher error:', error)
+            console.error('useGenerateVoucher error:', error)
         },
     })
 }
