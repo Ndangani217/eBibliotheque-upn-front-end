@@ -54,8 +54,13 @@ export default function CardPreview() {
                 {/* Infos principales */}
                 <div className="text-center mt-5 space-y-1">
                     <p className="uppercase font-bold tracking-wider text-lg sm:text-xl">
-                        {card.subscription?.category}
+                        {card.subscription?.category === 'student'
+                            ? 'ÉTUDIANT'
+                            : card.subscription?.category === 'researcher'
+                            ? 'CHERCHEUR'
+                            : card.subscription?.category?.toUpperCase() || '—'}
                     </p>
+
                     <p className="text-sm sm:text-base">
                         Valide du{' '}
                         <span className="font-semibold">
