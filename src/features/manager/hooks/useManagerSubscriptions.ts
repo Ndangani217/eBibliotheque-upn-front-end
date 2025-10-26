@@ -1,23 +1,84 @@
 'use client'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import api from '@/services/api'
+import { toast } from 'sonner'
+import { Subscription, SubscriptionStatus } from '@/types/subscription'
 
-export interface Subscription {
-    id: string
-    subscriberName: string
-    type: string
-    status: 'valide' | 'expire'
-    startDate: string
-    endDate: string
+export interface PaginationMeta {
+    total: number
+    perPage: number
+    currentPage: number
+    lastPage: number
 }
 
-export function useManagerSubscriptions(status: 'valide' | 'expire' = 'valide') {
-    return useQuery({
-        queryKey: ['manager-subscriptions', status],
+export interface SubscriptionQueryResult {
+    items: Subscription[]
+    meta: PaginationMeta
+}
+
+/**
+ *Liste des abonnements paginée
+ */
+export function useManagerSubscriptions(
+    status: SubscriptionStatus = SubscriptionStatus.VALIDE,
+    page = 1,
+    search = '',
+) {
+    return useQuery<SubscriptionQueryResult>({
+        queryKey: ['manager-subscriptions', status, page, search],
         queryFn: async () => {
-            const { data } = await api.get(`/manager/subscriptions?status=${status}`)
-            return data.data || []
+            const { data } = await api.get(`/manager/subscriptions`, {
+                params: { status, page, search },
+            })
+
+            //correspond exactement à ta réponse Postman
+            return {
+                items: data.data ?? [],
+                meta: {
+                    total: data.meta?.total ?? 0,
+                    perPage: data.meta?.perPage ?? 10,
+                    currentPage: data.meta?.currentPage ?? 1,
+                    lastPage: data.meta?.lastPage ?? 1,
+                },
+            }
+        },
+        staleTime: 1000 * 60 * 5,
+        retry: 1,
+        placeholderData: (prev) => prev,
+    })
+}
+
+/**
+ * 🔸 Hooks spécifiques par statut
+ */
+export function useActiveSubscriptions(page = 1, search = '') {
+    return useManagerSubscriptions(SubscriptionStatus.VALIDE, page, search)
+}
+export function useExpiredSubscriptions(page = 1, search = '') {
+    return useManagerSubscriptions(SubscriptionStatus.EXPIRE, page, search)
+}
+export function useSuspendedSubscriptions(page = 1, search = '') {
+    return useManagerSubscriptions(SubscriptionStatus.SUSPENDU, page, search)
+}
+
+/**
+ * Suspendre un abonnement
+ */
+export function useSuspendSubscription() {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (id: string) => {
+            const { data } = await api.patch(`/manager/subscriptions/${id}/suspend`)
+            return data
+        },
+        onSuccess: () => {
+            toast.success('Abonnement suspendu avec succès')
+            queryClient.invalidateQueries({ queryKey: ['manager-subscriptions'] })
+        },
+        onError: () => {
+            toast.error("Erreur lors de la suspension de l'abonnement")
         },
     })
 }

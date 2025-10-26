@@ -105,7 +105,7 @@ export function PaymentList({
                     </TableBody>
                 </Table>
 
-                {/* 🔁 Pagination desktop */}
+                {/*Pagination desktop */}
                 {meta && (
                     <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
                         <span>
@@ -184,7 +184,7 @@ export function PaymentList({
                     </Card>
                 ))}
 
-                {/* 🔁 Pagination mobile */}
+                {/* Pagination mobile */}
                 {meta && (
                     <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
                         <Button

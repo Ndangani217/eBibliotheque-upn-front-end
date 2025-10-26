@@ -1,8 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { PaymentTabs } from '../components/paymentTabs'
-import { Loader2, CreditCard } from 'lucide-react'
+import { PaymentTabs } from '../components/payments/paymentTabs'
 
 export default function PaymentsPage() {
     return (
