@@ -1,26 +1,28 @@
-// 🎨 Thème global UPN – cohérent avec la charte visuelle et Tailwind
+//Thème global UPN – cohérent avec la charte visuelle et Tailwind
 // src/constants/theme.ts
 
 export const colors = {
-    /** 🌈 Identité UPN */
+    /** Identité UPN */
     primary: '#60A5FA', // Bleu ciel professionnel
     primaryDark: '#3B82F6', // Bleu plus profond (hover)
     secondary: '#FACC15', // Jaune UPN (accent)
     secondaryDark: '#EAB308', // Jaune chaud (contraste)
 
-    /** ⚙️ États */
+    /**  États */
     success: '#22C55E',
     warning: '#FBBF24',
     danger: '#EF4444',
 
-    /** 🩶 Fond & texte - mode clair */
+    /** Fond & texte - mode clair */
     background: '#F9FAFB',
     surface: '#FFFFFF',
     text: '#1E293B',
     textSecondary: '#475569',
     border: '#E2E8F0',
 
-    /** 🌙 Mode sombre */
+    info: '#38bdf8',
+
+    /** Mode sombre */
     darkBackground: '#0F172A',
     darkSurface: '#1E293B',
     darkText: '#F8FAFC',
@@ -66,7 +68,7 @@ export const breakpoints = {
 }
 
 /**
- * 🌐 Thème global exporté
+ * Thème global exporté
  * Utilisable dans tous les composants :
  *   import { theme } from '@/constants/theme'
  */

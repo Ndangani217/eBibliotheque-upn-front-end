@@ -2,17 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-    Home,
-    Bell,
-    BookOpen,
-    CreditCard,
-    Users,
-    BarChart,
-    Settings,
-    Printer,
-    X,
-} from 'lucide-react'
+import { Home, CreditCard, Users, BookOpen, Printer, CheckCircle, Settings, X } from 'lucide-react'
 import { useAuthStore } from '@/features/auth/store'
 import { UserRole } from '@/types/user'
 import Image from 'next/image'
@@ -23,21 +13,44 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
     const pathname = usePathname()
     const { user } = useAuthStore()
 
+    /** -------------------------------
+     * 🎓 Menu de base (abonné)
+     * ------------------------------- */
     const baseMenu = [
         { label: 'Dashboard', href: '/dashboard', icon: Home },
-        { label: 'Card', href: '/dashboard/subscriber/card', icon: CreditCard },
+        { label: 'Ma carte', href: '/dashboard/subscriber/card', icon: CreditCard },
     ]
 
-    const managerExtra = [{ label: 'Cards', href: '/dashboard/manager/cards', icon: Printer }]
-    const adminExtra = [
-        { label: 'Users', href: '/dashboard/admin/users', icon: Users },
-        { label: 'Reports', href: '/dashboard/admin/reports', icon: BarChart },
-        { label: 'Settings', href: '/dashboard/admin/settings', icon: Settings },
+    /** -------------------------------
+     * 👨‍💼 Menu du manager
+     * ------------------------------- */
+    const managerMenu = [
+        { label: 'Tableau de bord', href: '/dashboard/manager', icon: Home },
+        { label: 'Paiements', href: '/dashboard/manager/payments', icon: CheckCircle },
+        { label: 'Abonnements', href: '/dashboard/manager/subscriptions', icon: BookOpen },
+        { label: 'Cartes', href: '/dashboard/manager/cards', icon: Printer },
+        { label: 'Utilisateurs', href: '/dashboard/manager/users', icon: Users },
     ]
 
+    /** -------------------------------
+     * 🛠️ Menu de l’administrateur
+     * ------------------------------- */
+    const adminMenu = [
+        { label: 'Dashboard', href: '/dashboard', icon: Home },
+        { label: 'Utilisateurs', href: '/dashboard/admin/users', icon: Users },
+        { label: 'Rapports', href: '/dashboard/admin/reports', icon: BookOpen },
+        { label: 'Paramètres', href: '/dashboard/admin/settings', icon: Settings },
+    ]
+
+    /** -------------------------------
+     * 📋 Attribution selon le rôle
+     * ------------------------------- */
     let menu = baseMenu
-    if (user?.role === UserRole.MANAGER) menu = [...baseMenu, ...managerExtra]
-    if (user?.role === UserRole.ADMIN) menu = [...baseMenu, ...adminExtra]
+    if (user?.role === UserRole.MANAGER || user?.role === UserRole.MANAGER_VIEWER) {
+        menu = managerMenu
+    } else if (user?.role === UserRole.ADMIN) {
+        menu = adminMenu
+    }
 
     return (
         <aside className="flex flex-col bg-surface border-r border-border h-screen w-64 fixed top-0 left-0 z-[70] shadow-card">
@@ -52,21 +65,16 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
                         className="rounded-full"
                     />
                     <span className="text-primary font-bold text-lg tracking-tight">
-                        UPN Library
+                        eBibliothèque
                     </span>
                 </div>
 
-                {/* Bouton animé (rotation + scale + fade) */}
+                {/* Bouton animé pour fermer sur mobile */}
                 <motion.div
                     initial={{ rotate: -180, scale: 0.5, opacity: 0 }}
                     animate={{ rotate: 0, scale: 1, opacity: 1 }}
                     exit={{ rotate: 90, scale: 0.8, opacity: 0 }}
-                    transition={{
-                        duration: 0.4,
-                        type: 'spring',
-                        stiffness: 180,
-                        damping: 15,
-                    }}
+                    transition={{ duration: 0.4, type: 'spring', stiffness: 180, damping: 15 }}
                 >
                     <Button
                         variant="ghost"
