@@ -1,7 +1,7 @@
 'use client'
 
 import { QRCodeCanvas } from 'qrcode.react'
-import { formatDate } from '@/constants/formatDate'
+import { formatDate } from '@/utils/date'
 import { useCard } from '@/features/subscriber/hooks/useCard'
 import { typography } from '@/constants/theme'
 

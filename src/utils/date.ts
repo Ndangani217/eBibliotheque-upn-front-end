@@ -1,3 +1,5 @@
+import { format } from 'date-fns'
+import { fr } from 'date-fns/locale'
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 export const formatDate = (dateStr?: string) => {
@@ -13,4 +15,10 @@ export const formatDate = (dateStr?: string) => {
     })
 
     return capitalize(formatted)
+}
+
+export function formatDateSafe(date: string | null | undefined): string {
+    if (!date) return '—'
+    const parsed = new Date(date)
+    return isNaN(parsed.getTime()) ? '—' : format(parsed, 'dd MMMM yyyy', { locale: fr })
 }

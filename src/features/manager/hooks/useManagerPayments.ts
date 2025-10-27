@@ -56,6 +56,7 @@ export function useManagerPayments(
 /**
  * Validation d’un paiement (mutation)
  */
+
 export function useValidatePayment() {
     const queryClient = useQueryClient()
     return useMutation({

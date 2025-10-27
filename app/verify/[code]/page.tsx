@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { typography } from '@/constants/theme'
-import { formatDate } from '@/constants/formatDate'
+import { formatDate } from '@/utils/date'
 
 interface VerifyResponse {
     valid: boolean
