@@ -6,7 +6,7 @@ import {
     useBlockManager,
     useUnblockManager,
     useDeleteManager,
-} from '../hooks/useMangers'
+} from '../hooks/useManagers'
 import { UserCards } from '@/features/admin/components/UserCards'
 import { UserTableHeader } from '@/features/admin/components/UserTableHeader'
 import CreateManagerModal from '@/features/admin/components/CreateManagerModal'

@@ -93,7 +93,7 @@ export default function CreateManagerModal({ open, onClose }: Props) {
                     <Input {...form.register('phoneNumber')} placeholder="Téléphone (+243...)" />
 
                     <Select
-                        onValueChange={(v) => form.setValue('role', v as any)}
+                        onValueChange={(v) => form.setValue('role', v as 'manager' | 'manager_viewer')}
                         defaultValue={form.getValues('role')}
                     >
                         <SelectTrigger>

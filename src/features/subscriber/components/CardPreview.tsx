@@ -1,6 +1,7 @@
 'use client'
 
 import { QRCodeCanvas } from 'qrcode.react'
+import Image from 'next/image'
 import { formatDate } from '@/utils/date'
 import { useCard } from '@/features/subscriber/hooks/useCard'
 import { typography } from '@/constants/theme'
@@ -32,9 +33,20 @@ export default function CardPreview() {
           p-6 sm:p-8 transform transition-all hover:scale-[1.02]
         `}
             >
+                {/* Logo UPN en haut à droite */}
+                <div className="absolute top-4 right-4">
+                    <Image
+                        src="/logo-upn.png"
+                        alt="Logo UPN"
+                        width={80}
+                        height={40}
+                        className="object-contain"
+                    />
+                </div>
+
                 {/* En-tête */}
                 <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-wide mb-4 drop-shadow">
-                    Carte d’abonnement
+                    Carte d'abonnement
                 </h2>
 
                 {/* QR Code dynamique */}
@@ -80,6 +92,12 @@ export default function CardPreview() {
                     }`}
                 >
                     Statut : {isActive ? 'Active' : 'Inactive'}
+                </div>
+
+                {/* Signature officielle UPN */}
+                <div className="mt-6 text-center space-y-1">
+                    <p className="text-xs font-bold text-white/90">Signature officielle UPN</p>
+                    <p className="text-xs text-white/70">Université Pédagogique Nationale</p>
                 </div>
 
                 {/* Bas de carte */}

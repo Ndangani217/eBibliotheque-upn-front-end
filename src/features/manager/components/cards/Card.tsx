@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card as UICard, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, CheckCircle, PauseCircle, Printer } from 'lucide-react'
 import { formatDateSafe } from '@/utils/date'
@@ -9,13 +9,13 @@ import type { LibraryCard } from '@/types/card'
 import { usePrintCard } from '@/features/manager/hooks/useManagerCards'
 import { CardStatus } from '@/types/card'
 
-interface Props {
+interface CardItemProps {
     card: LibraryCard
     onSuspend?: (id: string) => void
     suspending?: boolean
 }
 
-export function CardCard({ card, onSuspend, suspending }: Props) {
+export function CardItem({ card, onSuspend, suspending }: CardItemProps) {
     const { id, subscriberName, category, issuedAt, expiresAt, status } = card
     const printMutation = usePrintCard()
 
@@ -35,7 +35,7 @@ export function CardCard({ card, onSuspend, suspending }: Props) {
 
     return (
         <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }} className="w-full">
-            <Card className="border-border shadow-sm hover:shadow-md transition">
+            <UICard className="border-border shadow-sm hover:shadow-md transition">
                 <CardHeader className="flex items-center justify-between">
                     <CardTitle className="text-base font-medium">{subscriberName}</CardTitle>
                     {renderStatusIcon()}
@@ -104,7 +104,8 @@ export function CardCard({ card, onSuspend, suspending }: Props) {
                         </Button>
                     </div>
                 </CardContent>
-            </Card>
+            </UICard>
         </motion.div>
     )
 }
+

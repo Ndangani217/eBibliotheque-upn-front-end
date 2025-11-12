@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { PaymentTabs } from '../components/payments/paymentTabs'
+import { PaymentTabs } from '../components/payments/PaymentTabs'
 
 export default function PaymentsPage() {
     return (

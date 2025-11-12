@@ -2,9 +2,10 @@
 
 import { UserTable } from './UserTable'
 import { UserCards } from './UserCards'
+import type { User } from '@/types/user'
 
 interface Props {
-    users: any[]
+    users: User[]
     onBlock: (id: string) => void
     onUnblock: (id: string) => void
     onDelete: (id: string) => void

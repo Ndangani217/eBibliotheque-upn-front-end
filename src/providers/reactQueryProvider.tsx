@@ -17,10 +17,11 @@ const queryClient = new QueryClient({
             gcTime: 5 * 60 * 1000,
             refetchOnWindowFocus: false,
             meta: {
-                handleError: (error: any) => {
+                handleError: (error: unknown) => {
+                    const err = error as { response?: { data?: { message?: string } }; message?: string }
                     const message =
-                        error?.response?.data?.message ??
-                        error?.message ??
+                        err?.response?.data?.message ??
+                        err?.message ??
                         'Erreur réseau ou interne'
                     toast.error(message)
                 },
@@ -29,10 +30,11 @@ const queryClient = new QueryClient({
         mutations: {
             retry: 0,
             meta: {
-                handleError: (error: any) => {
+                handleError: (error: unknown) => {
+                    const err = error as { response?: { data?: { message?: string } }; message?: string }
                     const message =
-                        error?.response?.data?.message ??
-                        error?.message ??
+                        err?.response?.data?.message ??
+                        err?.message ??
                         'Erreur lors de la requête'
                     toast.error(message)
                 },

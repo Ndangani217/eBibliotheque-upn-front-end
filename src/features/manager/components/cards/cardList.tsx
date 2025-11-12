@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Loader2, PauseCircle, CheckCircle, Clock, Printer } from 'lucide-react'
-import { CardCard } from './cardCard'
+import { CardItem } from './Card'
 import { LibraryCard, CardStatus } from '@/types/card'
 import { usePrintCard } from '@/features/manager/hooks/useManagerCards'
 
@@ -142,7 +142,7 @@ export function CardList({
             {/* ===== VUE MOBILE ===== */}
             <div className="grid grid-cols-1 gap-4 md:hidden">
                 {cards.map((c) => (
-                    <CardCard key={c.id} card={c} onSuspend={onSuspend} suspending={suspending} />
+                    <CardItem key={c.id} card={c} onSuspend={onSuspend} suspending={suspending} />
                 ))}
             </div>
 

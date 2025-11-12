@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
-import { useForgotPassword } from '@/features/auth/hooks'
+import { useForgotPassword } from '@/features/auth'
 
 export default function ForgotPasswordPage() {
     const [email, setEmail] = useState('')

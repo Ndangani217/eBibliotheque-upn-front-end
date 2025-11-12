@@ -5,7 +5,7 @@ export enum SubscriptionStatus {
     SUSPENDU = 'suspendu',
 }
 
-/** Structure d’un abonnement */
+/** Structure d'un abonnement */
 export interface Subscription {
     id: string
     subscriberName: string
@@ -14,4 +14,5 @@ export interface Subscription {
     category: string
     startDate: string
     endDate: string
+    cardId?: string | null
 }

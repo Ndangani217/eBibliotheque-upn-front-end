@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { theme } from '@/constants/theme'
 
-import { useCreateUserByAdmin, type CreateAdminUserPayload } from '@/features/auth/hooks'
+import { useCreateUserByAdmin, type CreateAdminUserPayload } from '@/features/auth'
 
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

@@ -1,6 +1,6 @@
 'use client'
 
-import RegisterFormAbonne from '@/features/auth/components/registerForm'
+import { RegisterForm } from '@/features/auth'
 
 export default function RegisterPage() {
     return (
@@ -20,7 +20,7 @@ export default function RegisterPage() {
                 </div>
 
                 {/*  Formulaire d’inscription */}
-                <RegisterFormAbonne />
+                <RegisterForm />
 
                 {/*  Lien vers la connexion */}
                 <p className="text-center text-sm text-text-secondary mt-4">

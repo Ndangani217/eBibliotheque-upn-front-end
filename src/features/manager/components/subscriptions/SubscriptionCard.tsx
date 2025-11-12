@@ -3,10 +3,12 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock, PauseCircle } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, PauseCircle, Printer } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
+import { useState } from 'react'
 import type { SubscriptionStatus } from '@/types/subscription'
+import { usePrintCardBySubscription } from '@/features/manager/hooks/useManagerSubscriptions'
 
 interface SubscriptionCardProps {
     id: string
@@ -17,6 +19,7 @@ interface SubscriptionCardProps {
     status: SubscriptionStatus
     onSuspend?: (id: string) => void
     suspending?: boolean
+    onPrintCard?: (subscriptionId: string) => void
 }
 
 export function SubscriptionCard({
@@ -28,7 +31,25 @@ export function SubscriptionCard({
     status,
     onSuspend,
     suspending,
+    onPrintCard,
 }: SubscriptionCardProps) {
+    const printCardMutation = usePrintCardBySubscription()
+    const [isPrinting, setIsPrinting] = useState(false)
+
+    const handlePrintClick = async (e: React.MouseEvent) => {
+        e.stopPropagation() // Empêche la propagation de l'événement
+        
+        if (onPrintCard) {
+            onPrintCard(id)
+        } else {
+            setIsPrinting(true)
+            printCardMutation.mutate(id, {
+                onSettled: () => {
+                    setIsPrinting(false)
+                },
+            })
+        }
+    }
     return (
         <motion.div whileHover={{ scale: 1.02 }} transition={{ duration: 0.2 }} className="w-full">
             <Card className="border-border shadow-md hover:shadow-lg transition-all duration-200">
@@ -61,22 +82,47 @@ export function SubscriptionCard({
                             : 'Suspendu'}
                     </p>
 
-                    {onSuspend && status === 'valide' && (
-                        <Button
-                            size="sm"
-                            className="w-full mt-2"
-                            onClick={() => onSuspend(id)}
-                            disabled={suspending}
-                        >
-                            {suspending ? (
-                                <>
-                                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                    Suspension...
-                                </>
-                            ) : (
-                                'Suspendre'
+                    {(onSuspend || onPrintCard) && status === 'valide' && (
+                        <div className="flex flex-col gap-2 mt-2">
+                            {onSuspend && (
+                                <Button
+                                    size="sm"
+                                    className="w-full"
+                                    onClick={() => onSuspend(id)}
+                                    disabled={suspending}
+                                >
+                                    {suspending ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Suspension...
+                                        </>
+                                    ) : (
+                                        'Suspendre'
+                                    )}
+                                </Button>
                             )}
-                        </Button>
+                            {onPrintCard && (
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="w-full"
+                                    onClick={handlePrintClick}
+                                    disabled={isPrinting || printCardMutation.isPending}
+                                >
+                                    {isPrinting || printCardMutation.isPending ? (
+                                        <>
+                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            Impression...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Printer className="w-4 h-4 mr-2" />
+                                            Imprimer
+                                        </>
+                                    )}
+                                </Button>
+                            )}
+                        </div>
                     )}
                 </CardContent>
             </Card>

@@ -82,3 +82,31 @@ export function useSuspendSubscription() {
         },
     })
 }
+
+/**
+ * Imprimer une carte à partir de l'ID de l'abonnement
+ */
+export function usePrintCardBySubscription() {
+    return useMutation<void, { message?: string }, string>({
+        mutationFn: async (subscriptionId: string): Promise<void> => {
+            const response = await api.get<Blob>(`/manager/subscriptions/${subscriptionId}/print-card`, {
+                responseType: 'blob',
+            })
+            const blob = new Blob([response.data], { type: 'application/pdf' })
+            const url = window.URL.createObjectURL(blob)
+            const link = document.createElement('a')
+            link.href = url
+            link.setAttribute('download', `carte-${subscriptionId}.pdf`)
+            document.body.appendChild(link)
+            link.click()
+            document.body.removeChild(link)
+            window.URL.revokeObjectURL(url)
+        },
+        onSuccess: () => {
+            toast.success('Téléchargement du PDF lancé')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Erreur lors de l\'impression de la carte')
+        },
+    })
+}

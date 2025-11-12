@@ -1,7 +1,7 @@
 'use client'
 
-import { useAuthStore } from '@/features/auth/store'
-import { useLogout } from '@/features/auth/hooks'
+import { useAuthStore } from '@/features/auth'
+import { useLogout } from '@/features/auth'
 import { Bell, Menu, LogOut, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {

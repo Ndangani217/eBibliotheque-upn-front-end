@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
 import { theme } from '@/constants/theme'
-import { useResetPassword } from '@/features/auth/hooks'
+import { useResetPassword } from '@/features/auth'
 import { useState } from 'react'
 
 const schema = z

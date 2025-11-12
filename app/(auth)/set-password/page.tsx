@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Loader2, Eye, EyeOff } from 'lucide-react'
-import { useSetPassword } from '@/features/auth/hooks'
+import { useSetPassword } from '@/features/auth'
 import { useState } from 'react'
 
 const schema = z

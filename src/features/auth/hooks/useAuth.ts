@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import type { AxiosError } from 'axios'
 import { authApi, usersApi } from '@/services/api'
-import { useAuthStore } from '@/features/auth'
+import { useAuthStore } from '@/features/auth/stores/useAuthStore'
 import type { User, UserRole, SubscriberCategory } from '@/types/user'
 import type { ApiErrorResponse } from '@/types/api'
 
@@ -116,20 +116,22 @@ export function useAuthenticatedUser() {
 export function useRegisterSubscriber() {
     const router = useRouter()
 
-    return useMutation<{ message: string }, AxiosError<ApiErrorResponse>, RegisterSubscriberPayload>(
-        {
-            mutationFn: async (payload) => {
-                const result = await usersApi.registerSubscriber(payload)
-                return { message: result.message }
-            },
-            onSuccess: (res) => {
-                toast.success(res.message || 'Inscription réussie. Vérifiez votre e-mail 📩')
-                router.push('/login')
-            },
-            onError: (error) =>
-                toast.error(error.response?.data?.message || "Erreur lors de l'inscription."),
+    return useMutation<
+        { message: string },
+        AxiosError<ApiErrorResponse>,
+        RegisterSubscriberPayload
+    >({
+        mutationFn: async (payload) => {
+            const result = await usersApi.registerSubscriber(payload)
+            return { message: result.message }
         },
-    )
+        onSuccess: (res) => {
+            toast.success(res.message || 'Inscription réussie. Vérifiez votre e-mail 📩')
+            router.push('/login')
+        },
+        onError: (error) =>
+            toast.error(error.response?.data?.message || "Erreur lors de l'inscription."),
+    })
 }
 
 export function useForgotPassword() {
@@ -179,8 +181,7 @@ export function useSetPassword() {
         },
         onError: (error) =>
             toast.error(
-                error.response?.data?.message ||
-                    'Erreur lors de la définition du mot de passe',
+                error.response?.data?.message || 'Erreur lors de la définition du mot de passe',
             ),
     })
 }
@@ -209,25 +210,23 @@ export function useAuth() {
  *  Hook pour la création d'un utilisateur par un administrateur
  */
 export function useCreateUserByAdmin() {
-    return useMutation<{ message: string }, AxiosError<ApiErrorResponse>, CreateAdminUserPayload>(
-        {
-            // Appel API
-            mutationFn: async (payload) => {
-                const result = await usersApi.create(payload)
-                return { message: result.message }
-            },
-
-            // Succès
-            onSuccess: (res) => {
-                toast.success(res.message || 'Utilisateur créé avec succès ')
-            },
-
-            // Erreur
-            onError: (error) => {
-                toast.error(
-                    error.response?.data?.message || "Erreur lors de la création de l'utilisateur",
-                )
-            },
+    return useMutation<{ message: string }, AxiosError<ApiErrorResponse>, CreateAdminUserPayload>({
+        // Appel API
+        mutationFn: async (payload) => {
+            const result = await usersApi.create(payload)
+            return { message: result.message }
         },
-    )
+
+        // Succès
+        onSuccess: (res) => {
+            toast.success(res.message || 'Utilisateur créé avec succès ')
+        },
+
+        // Erreur
+        onError: (error) => {
+            toast.error(
+                error.response?.data?.message || "Erreur lors de la création de l'utilisateur",
+            )
+        },
+    })
 }

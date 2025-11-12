@@ -1,27 +1,10 @@
-import axios, { AxiosInstance, AxiosResponse, AxiosError } from 'axios'
-import { useAuthStore } from '@/features/auth'
+/**
+ * Point d'entrée principal pour les services API
+ * Exporte l'instance axios et tous les services API
+ */
+export { default as api } from './apiClient'
+export { authApi } from './api/auth.api'
+export { usersApi } from './api/users.api'
 
-const api: AxiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-})
-
-api.interceptors.request.use((config) => {
-    const token = useAuthStore.getState().token
-    if (token) config.headers.Authorization = `Bearer ${token}`
-    return config
-})
-
-api.interceptors.response.use(
-    (response: AxiosResponse) => response,
-    (error: AxiosError) => {
-        const status = error.response?.status
-        if (status === 401) {
-            console.warn('🔒 Token expiré — déconnexion.')
-            useAuthStore.getState().logout()
-        }
-        return Promise.reject(error)
-    },
-)
-
-export default api
+// Export par défaut pour compatibilité avec les anciens imports
+export { default } from './apiClient'

@@ -10,8 +10,10 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock, PauseCircle } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, PauseCircle, Printer } from 'lucide-react'
+import { useState } from 'react'
 import type { PaginationMeta } from '@/features/manager/hooks/useManagerSubscriptions'
+import { usePrintCardBySubscription } from '@/features/manager/hooks/useManagerSubscriptions'
 import { Subscription } from '@/types/subscription'
 import { SubscriptionCard } from './SubscriptionCard'
 
@@ -23,6 +25,7 @@ interface Props {
     onSuspend?: (id: string) => void
     suspending?: boolean
     onPageChange?: (page: number) => void
+    onPrintCard?: (subscriptionId: string) => void
 }
 
 export function SubscriptionList({
@@ -33,7 +36,25 @@ export function SubscriptionList({
     onSuspend,
     suspending,
     onPageChange,
+    onPrintCard,
 }: Props) {
+    const printCardMutation = usePrintCardBySubscription()
+    const [printingId, setPrintingId] = useState<string | null>(null)
+
+    const handlePrintClick = async (e: React.MouseEvent, subscriptionId: string) => {
+        e.stopPropagation() // Empêche la propagation de l'événement
+        
+        if (onPrintCard) {
+            onPrintCard(subscriptionId)
+        } else {
+            setPrintingId(subscriptionId)
+            printCardMutation.mutate(subscriptionId, {
+                onSettled: () => {
+                    setPrintingId(null)
+                },
+            })
+        }
+    }
     if (loading)
         return (
             <div className="flex justify-center items-center h-32">
@@ -61,7 +82,7 @@ export function SubscriptionList({
                             <TableHead>Début</TableHead>
                             <TableHead>Fin</TableHead>
                             <TableHead>Statut</TableHead>
-                            {onSuspend && <TableHead>Action</TableHead>}
+                            {(onSuspend || onPrintCard) && <TableHead>Action</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -90,19 +111,44 @@ export function SubscriptionList({
                                         </span>
                                     )}
                                 </TableCell>
-                                {onSuspend && s.status === 'valide' && (
+                                {(onSuspend || onPrintCard) && s.status === 'valide' && (
                                     <TableCell>
-                                        <Button
-                                            size="sm"
-                                            disabled={suspending}
-                                            onClick={() => onSuspend(s.id)}
-                                        >
-                                            {suspending ? (
-                                                <Loader2 className="w-4 h-4 animate-spin mr-1" />
-                                            ) : (
-                                                'Suspendre'
+                                        <div className="flex items-center gap-2">
+                                            {onSuspend && (
+                                                <Button
+                                                    size="sm"
+                                                    disabled={suspending}
+                                                    onClick={() => onSuspend(s.id)}
+                                                >
+                                                    {suspending ? (
+                                                        <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                                                    ) : (
+                                                        'Suspendre'
+                                                    )}
+                                                </Button>
                                             )}
-                                        </Button>
+                                            {onPrintCard && (
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    disabled={printingId === s.id || printCardMutation.isPending}
+                                                    onClick={(e) => handlePrintClick(e, s.id)}
+                                                    className="flex items-center gap-1"
+                                                >
+                                                    {printingId === s.id || printCardMutation.isPending ? (
+                                                        <>
+                                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                                            Impression...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Printer className="w-4 h-4" />
+                                                            Imprimer
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            )}
+                                        </div>
                                     </TableCell>
                                 )}
                             </TableRow>
@@ -151,6 +197,7 @@ export function SubscriptionList({
                         status={s.status}
                         onSuspend={onSuspend}
                         suspending={suspending}
+                        onPrintCard={onPrintCard}
                     />
                 ))}
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, CreditCard, Users, BookOpen, Printer, CheckCircle, Settings, X } from 'lucide-react'
+import { Home, CreditCard, Users, BookOpen, CheckCircle, Settings, X } from 'lucide-react'
 import { useAuthStore } from '@/features/auth/store'
 import { UserRole } from '@/types/user'
 import Image from 'next/image'
@@ -28,7 +28,6 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
         { label: 'Tableau de bord', href: '/dashboard/manager', icon: Home },
         { label: 'Paiements', href: '/dashboard/manager/payments', icon: CheckCircle },
         { label: 'Abonnements', href: '/dashboard/manager/subscriptions', icon: BookOpen },
-        { label: 'Cartes', href: '/dashboard/manager/cards', icon: Printer },
         { label: 'Utilisateurs', href: '/dashboard/manager/users', icon: Users },
     ]
 
