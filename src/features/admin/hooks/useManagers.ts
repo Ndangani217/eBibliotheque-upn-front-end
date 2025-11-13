@@ -3,17 +3,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usersApi } from '@/services/api'
 
-/* Type utilisateur */
-interface User {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    phoneNumber: string
-    role: string
-    isBlocked: boolean
-}
-
 /**Hook corrigé et typé */
 export function useManagers(search?: string) {
     return useQuery({

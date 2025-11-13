@@ -46,7 +46,7 @@ export function UserCards({ users, onBlock, onUnblock, onDelete }: Props) {
 
     if (users.length === 0) {
         return (
-            <p className="text-center py-10 text-text-secondary bg-surface rounded-lg border border-border">
+            <p className="text-center py-10 text-text-secondary bg-surface rounded-[9px] border border-border">
                 Aucun utilisateur trouvé.
             </p>
         )
@@ -58,7 +58,7 @@ export function UserCards({ users, onBlock, onUnblock, onDelete }: Props) {
                 {users.map((user) => (
                     <div
                         key={user.id}
-                        className="bg-surface border border-border shadow-card rounded-2xl p-4 flex flex-col justify-between hover:shadow-lg hover:border-primary/50 transition-all duration-200"
+                        className="bg-surface border border-border shadow-card rounded-[9px] p-4 flex flex-col justify-between hover:shadow-lg hover:border-primary/50 transition-all duration-200"
                     >
                         <div className="flex items-center justify-between mb-3">
                             <h3 className="font-semibold text-base sm:text-lg text-primary">

@@ -49,21 +49,21 @@ export const usersApi = {
      * Liste les utilisateurs
      */
     list: async (params?: { page?: number; limit?: number; search?: string }) => {
-        const { data } = await api.get<ApiSuccessResponse<User[], PaginationMeta>>('/users', {
+        const { data } = await api.get<ApiSuccessResponse<{ data: User[]; meta: PaginationMeta }>>('/users', {
             params,
         })
-        return { items: data.data, meta: data.meta! }
+        return { items: data.data.data, meta: data.data.meta }
     },
 
     /**
      * Liste les utilisateurs non vérifiés
      */
     listUnverified: async (params?: { page?: number; limit?: number; search?: string }) => {
-        const { data } = await api.get<ApiSuccessResponse<User[], PaginationMeta>>(
+        const { data } = await api.get<ApiSuccessResponse<{ data: User[]; meta: PaginationMeta }>>(
             '/users/unverified',
             { params },
         )
-        return { items: data.data, meta: data.meta! }
+        return { items: data.data.data, meta: data.data.meta }
     },
 
     /**

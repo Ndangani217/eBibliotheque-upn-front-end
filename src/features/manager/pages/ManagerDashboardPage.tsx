@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useQuery } from '@tanstack/react-query'
 import { BookOpen, CreditCard, CheckCircle, XCircle, Users, Clock } from 'lucide-react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { useAuthStore } from '@/features/auth/store'
+import { useAuthStore } from '@/features/auth'
 import api from '@/services/api'
 import { theme } from '@/constants/theme'
 

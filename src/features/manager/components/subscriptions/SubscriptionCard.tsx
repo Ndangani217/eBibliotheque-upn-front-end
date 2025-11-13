@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock, PauseCircle, Printer } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, PauseCircle, Printer, Ban } from 'lucide-react'
 import { format } from 'date-fns'
 import { fr } from 'date-fns/locale'
 import { useState } from 'react'
@@ -87,17 +87,21 @@ export function SubscriptionCard({
                             {onSuspend && (
                                 <Button
                                     size="sm"
-                                    className="w-full"
+                                    variant="destructive"
+                                    className="w-full flex items-center justify-center gap-2 rounded-[9px] text-white shadow-button"
                                     onClick={() => onSuspend(id)}
                                     disabled={suspending}
                                 >
                                     {suspending ? (
                                         <>
-                                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                            <Loader2 className="w-4 h-4 animate-spin" />
                                             Suspension...
                                         </>
                                     ) : (
-                                        'Suspendre'
+                                        <>
+                                            <Ban className="w-4 h-4" />
+                                            Suspendre
+                                        </>
                                     )}
                                 </Button>
                             )}
@@ -105,7 +109,7 @@ export function SubscriptionCard({
                                 <Button
                                     size="sm"
                                     variant="outline"
-                                    className="w-full"
+                                    className="w-full flex items-center justify-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
                                     onClick={handlePrintClick}
                                     disabled={isPrinting || printCardMutation.isPending}
                                 >

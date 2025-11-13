@@ -1,23 +1,54 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/features/auth/store'
+import { useAuthStore } from '@/features/auth'
 import LayoutDashboard from '@/components/layouts/layoutDashboard'
 
 export default function ProtectedDashboardLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter()
-    const { isAuthenticated, loading, hydrate } = useAuthStore()
+    const { isAuthenticated, loading, hydrate, token, user } = useAuthStore()
+    const [hasChecked, setHasChecked] = useState(false)
 
     useEffect(() => {
-        hydrate()
-    }, [hydrate])
+        // Vérifier localStorage directement au montage
+        if (!hasChecked) {
+            const storedToken = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+            
+            console.log('🔍 Vérification auth:', { 
+                storedToken: !!storedToken, 
+                token: !!token, 
+                user: !!user, 
+                isAuthenticated,
+                loading 
+            })
+            
+            if (storedToken) {
+                // On a un token dans localStorage
+                if (token && user && isAuthenticated) {
+                    // Tout est déjà en place dans le store, pas besoin d'hydrater
+                    console.log('✅ Utilisateur déjà authentifié dans le store, pas d\'hydratation nécessaire')
+                    setHasChecked(true)
+                } else {
+                    // On a un token mais pas dans le store, il faut hydrater
+                    console.log('🔄 Hydratation nécessaire depuis localStorage')
+                    hydrate().finally(() => setHasChecked(true))
+                }
+            } else {
+                // Pas de token, utilisateur non authentifié
+                console.log('❌ Pas de token dans localStorage')
+                setHasChecked(true)
+            }
+        }
+    }, [hasChecked, token, user, isAuthenticated, hydrate, loading])
 
     useEffect(() => {
-        if (!loading && !isAuthenticated) {
+        // Attendre que la vérification soit terminée avant de rediriger
+        if (hasChecked && !loading && !isAuthenticated) {
+            console.log('🚫 Redirection vers /login (non authentifié)')
             router.push('/login')
         }
-    }, [loading, isAuthenticated, router])
+    }, [hasChecked, loading, isAuthenticated, router])
 
     // Pendant que le store charge => pas de redirection
     if (loading) {

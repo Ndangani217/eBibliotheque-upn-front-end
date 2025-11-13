@@ -68,6 +68,8 @@ export function useValidatePayment() {
             toast.success('Paiement validé avec succès')
             queryClient.invalidateQueries({ queryKey: ['manager-payments'] })
             queryClient.invalidateQueries({ queryKey: ['manager-dashboard'] })
+            queryClient.invalidateQueries({ queryKey: ['manager-subscriptions'] })
+            queryClient.invalidateQueries({ queryKey: ['manager-cards'] })
         },
         onError: () => toast.error('Erreur lors de la validation du paiement'),
     })

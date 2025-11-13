@@ -11,6 +11,7 @@ import { useCreateUserByAdmin, type CreateAdminUserPayload } from '@/features/au
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
+import { Loader2, UserPlus } from 'lucide-react'
 import {
     Select,
     SelectTrigger,
@@ -28,7 +29,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>
 
-export default function AdminCreateUserForm() {
+export default function AdminRegisterUserForm() {
     const { mutateAsync: createUser, isPending } = useCreateUserByAdmin()
 
     const {
@@ -65,7 +66,7 @@ export default function AdminCreateUserForm() {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="max-w-sm mx-auto space-y-4 p-6 rounded-xl shadow bg-white dark:bg-gray-900"
+            className="max-w-sm mx-auto space-y-4 p-6 rounded-[9px] shadow bg-white dark:bg-gray-900"
         >
             <h2
                 className="text-xl font-semibold text-center"
@@ -144,7 +145,17 @@ export default function AdminCreateUserForm() {
                     color: theme.colors.surface,
                 }}
             >
-                {isPending ? 'Création...' : 'Créer'}
+                {isPending ? (
+                    <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Création...
+                    </>
+                ) : (
+                    <>
+                        <UserPlus className="w-4 h-4" />
+                        Créer
+                    </>
+                )}
             </Button>
         </form>
     )

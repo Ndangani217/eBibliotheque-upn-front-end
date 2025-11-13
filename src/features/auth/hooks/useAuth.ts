@@ -77,7 +77,8 @@ export function useLogout() {
         mutationFn: async () => {
             try {
                 await authApi.logout()
-            } catch (err) {
+            } catch {
+                // Ignorer les erreurs de déconnexion (token peut être expiré)
                 console.warn('Déconnexion backend échouée (token expiré ?), nettoyage local.')
             }
         },
@@ -156,6 +157,7 @@ export function useResetPassword() {
         mutationFn: async (payload) => {
             const result = await authApi.resetPassword(payload.token, {
                 newPassword: payload.newPassword,
+                newPassword_confirmation: payload.confirmPassword,
             })
             return { message: result.message }
         },
@@ -173,6 +175,7 @@ export function useSetPassword() {
         mutationFn: async (payload) => {
             const result = await authApi.setPassword(payload.token, {
                 newPassword: payload.newPassword,
+                newPassword_confirmation: payload.confirmPassword,
             })
             return { message: result.message }
         },
@@ -213,7 +216,10 @@ export function useCreateUserByAdmin() {
     return useMutation<{ message: string }, AxiosError<ApiErrorResponse>, CreateAdminUserPayload>({
         // Appel API
         mutationFn: async (payload) => {
-            const result = await usersApi.create(payload)
+            const result = await usersApi.create({
+                ...payload,
+                phoneNumber: '', // Valeur par défaut pour les admins/gestionnaires
+            })
             return { message: result.message }
         },
 

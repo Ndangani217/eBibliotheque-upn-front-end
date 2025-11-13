@@ -73,7 +73,7 @@ export default function VerifyCardPage() {
 
     return (
         <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-background">
-            <section className="max-w-md w-full bg-surface border border-border rounded-2xl shadow-card p-8 space-y-5 text-center">
+            <section className="max-w-md w-full bg-surface border border-border rounded-[9px] shadow-card p-8 space-y-5 text-center">
                 <h1 className={`${typography.h2} text-primary`}>Résultat de la vérification</h1>
 
                 {/*Message principal */}

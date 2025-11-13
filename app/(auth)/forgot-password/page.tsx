@@ -1,11 +1,12 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Mail } from 'lucide-react'
 import { useForgotPassword } from '@/features/auth'
 
 export default function ForgotPasswordPage() {
@@ -33,10 +34,15 @@ export default function ForgotPasswordPage() {
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-background px-4 transition-colors duration-300">
-            <section className="w-full max-w-md bg-surface border border-border shadow-card rounded-xl p-8 space-y-6 transition-colors duration-300">
+            <section className="w-full max-w-md bg-surface border border-border shadow-card rounded-[9px] p-8 space-y-6 transition-colors duration-300">
                 {/* Logo et titre */}
                 <div className="flex flex-col items-center gap-2 text-center">
-                    <img src="/logo-upn.png" alt="Logo UPN" className="w-16 h-16" />
+                    <Image
+                        src="/logo-upn.png"
+                        alt="Logo UPN"
+                        width={64}
+                        height={64}
+                    />
                     <h1 className="text-2xl font-semibold text-text">
                         Réinitialiser le mot de passe
                     </h1>
@@ -57,7 +63,7 @@ export default function ForgotPasswordPage() {
                             placeholder="exemple@upn.cd"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
+                            className="border border-border bg-surface text-text rounded-[9px] focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
                         />
                     </div>
 
@@ -65,7 +71,7 @@ export default function ForgotPasswordPage() {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-lg py-2 shadow-button transition-all duration-200"
+                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200"
                     >
                         {isPending ? (
                             <>
@@ -73,7 +79,10 @@ export default function ForgotPasswordPage() {
                                 Envoi en cours...
                             </>
                         ) : (
-                            'Envoyer le lien'
+                            <>
+                                <Mail className="w-5 h-5" />
+                                Envoyer le lien
+                            </>
                         )}
                     </Button>
                 </form>

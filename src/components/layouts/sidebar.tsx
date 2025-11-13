@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Home, CreditCard, Users, BookOpen, CheckCircle, Settings, X } from 'lucide-react'
-import { useAuthStore } from '@/features/auth/store'
+import { useAuthStore } from '@/features/auth'
 import { UserRole } from '@/types/user'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -96,7 +96,7 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
                             key={href}
                             href={href}
                             onClick={onLinkClick}
-                            className={`flex items-center gap-3 px-4 py-2 rounded-md mx-2 transition-all duration-150 ${
+                            className={`flex items-center gap-3 px-4 py-2 rounded-[9px] mx-2 transition-all duration-150 ${
                                 isActive
                                     ? 'bg-primary/10 text-primary font-semibold'
                                     : 'text-text hover:bg-primary/5 hover:text-primary'

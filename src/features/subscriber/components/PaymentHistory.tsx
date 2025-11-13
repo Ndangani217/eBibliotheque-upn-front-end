@@ -40,7 +40,7 @@ export default function PaymentHistory() {
     }
 
     return (
-        <section className="bg-surface border border-border rounded-xl shadow-card p-6">
+        <section className="bg-surface border border-border rounded-[9px] shadow-card p-6">
             <h2 className={`${typography.h2} mb-4`}>Historique des paiements</h2>
             <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">

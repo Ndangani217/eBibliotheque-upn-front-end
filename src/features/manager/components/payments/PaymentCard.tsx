@@ -55,7 +55,7 @@ export function PaymentCard({
                         <Button
                             variant="default"
                             size="sm"
-                            className="w-full mt-2"
+                            className="w-full mt-2 text-white"
                             onClick={() => onValidate(id)}
                             disabled={validating}
                         >

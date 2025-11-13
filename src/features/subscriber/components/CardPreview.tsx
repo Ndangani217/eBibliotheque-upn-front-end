@@ -28,7 +28,7 @@ export default function CardPreview() {
         <section className="flex justify-center mt-10 px-4">
             <div
                 className={`
-          relative w-full max-w-sm rounded-3xl shadow-xl overflow-hidden
+          relative w-full max-w-sm rounded-[9px] shadow-xl overflow-hidden
           bg-gradient-to-br from-blue-500/90 to-sky-400/80 text-white
           p-6 sm:p-8 transform transition-all hover:scale-[1.02]
         `}
@@ -46,12 +46,12 @@ export default function CardPreview() {
 
                 {/* En-tête */}
                 <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-wide mb-4 drop-shadow">
-                    Carte d'abonnement
+                    Carte d&apos;abonnement
                 </h2>
 
                 {/* QR Code dynamique */}
                 <div className="flex justify-center">
-                    <div className="bg-white p-2 rounded-xl shadow-md">
+                    <div className="bg-white p-2 rounded-[9px] shadow-md">
                         <QRCodeCanvas
                             value={verifyUrl}
                             size={160}

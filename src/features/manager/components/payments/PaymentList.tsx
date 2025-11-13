@@ -10,8 +10,9 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, Check, ChevronLeft, ChevronRight } from 'lucide-react'
 import type { Payment, PaginationMeta } from '@/features/manager/hooks/useManagerPayments'
+import NumberedPagination from '@/components/ui/NumberedPagination'
 
 interface Props {
     payments?: Payment[]
@@ -51,7 +52,7 @@ export function PaymentList({
     return (
         <div className="w-full">
             {/* TABLE DESKTOP */}
-            <div className="hidden md:block rounded-lg border border-border bg-card">
+            <div className="hidden md:block rounded-[9px] border border-border bg-card">
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
@@ -91,11 +92,19 @@ export function PaymentList({
                                             size="sm"
                                             disabled={validating}
                                             onClick={() => onValidate(p.id)}
+                                            variant="outline"
+                                            className="flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
                                         >
                                             {validating ? (
-                                                <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                                                <>
+                                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                                    Validation...
+                                                </>
                                             ) : (
-                                                'Valider'
+                                                <>
+                                                    <Check className="w-4 h-4" />
+                                                    Valider
+                                                </>
                                             )}
                                         </Button>
                                     </TableCell>
@@ -105,32 +114,7 @@ export function PaymentList({
                     </TableBody>
                 </Table>
 
-                {/*Pagination desktop */}
-                {meta && (
-                    <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
-                        <span>
-                            Page {meta.current_page} / {meta.last_page}
-                        </span>
-                        <div className="space-x-2">
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                disabled={meta.current_page <= 1}
-                                onClick={() => onPageChange?.(meta.current_page - 1)}
-                            >
-                                Précédent
-                            </Button>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                disabled={meta.current_page >= meta.last_page}
-                                onClick={() => onPageChange?.(meta.current_page + 1)}
-                            >
-                                Suivant
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                
             </div>
 
             {/* 📱 CARTES MOBILE */}
@@ -169,14 +153,20 @@ export function PaymentList({
 
                             {onValidate && p.status === 'en_attente' && (
                                 <Button
-                                    className="w-full mt-3"
+                                    className="w-full mt-3 flex items-center justify-center gap-2"
                                     disabled={validating}
                                     onClick={() => onValidate(p.id)}
                                 >
                                     {validating ? (
-                                        <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                                        <>
+                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                            Validation...
+                                        </>
                                     ) : (
-                                        'Valider le paiement'
+                                        <>
+                                            <Check className="w-4 h-4" />
+                                            Valider le paiement
+                                        </>
                                     )}
                                 </Button>
                             )}
@@ -184,31 +174,18 @@ export function PaymentList({
                     </Card>
                 ))}
 
-                {/* Pagination mobile */}
-                {meta && (
-                    <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={meta.current_page <= 1}
-                            onClick={() => onPageChange?.(meta.current_page - 1)}
-                        >
-                            Précédent
-                        </Button>
-                        <span>
-                            Page {meta.current_page} / {meta.last_page}
-                        </span>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={meta.current_page >= meta.last_page}
-                            onClick={() => onPageChange?.(meta.current_page + 1)}
-                        >
-                            Suivant
-                        </Button>
-                    </div>
-                )}
+                
             </div>
+            {/* Pagination unifiée */}
+            {meta && (
+                <div className="py-3">
+                    <NumberedPagination
+                        currentPage={meta.current_page}
+                        totalPages={meta.last_page}
+                        onPageChange={(p) => onPageChange?.(p)}
+                    />
+                </div>
+            )}
         </div>
     )
 }

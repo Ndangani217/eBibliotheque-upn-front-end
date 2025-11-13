@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, X, Check } from 'lucide-react'
 
 interface ConfirmDialogProps {
     open: boolean
@@ -53,17 +53,19 @@ export function ConfirmDialog({
                 </motion.div>
 
                 <DialogFooter className="flex justify-end gap-3 mt-4">
-                    <Button variant="outline" onClick={onCancel}>
+                    <Button variant="outline" onClick={onCancel} className="flex items-center gap-2">
+                        <X className="w-4 h-4" />
                         {cancelLabel}
                     </Button>
                     <Button
                         onClick={onConfirm}
-                        className={
+                        className={`flex items-center gap-2 ${
                             danger
                                 ? 'bg-danger text-white hover:bg-danger/80'
                                 : 'bg-primary text-white'
-                        }
+                        }`}
                     >
+                        <Check className="w-4 h-4" />
                         {confirmLabel}
                     </Button>
                 </DialogFooter>

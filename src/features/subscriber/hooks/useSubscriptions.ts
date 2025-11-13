@@ -1,9 +1,10 @@
 'use client'
 
-import { useAuthStore } from '@/features/auth'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import api from '@/services/api'
+import { downloadBlob } from '@/lib/fileDownload'
+import { handleApiError } from '@/lib/errorHandler'
 import type { AxiosError, AxiosResponse } from 'axios'
 
 export interface GenerateVoucherPayload {
@@ -17,22 +18,17 @@ export interface ApiError {
 }
 
 export function useGenerateVoucher() {
-    const token = useAuthStore((state) => state.token)
-    const isLoadingUser = useAuthStore((state) => state.loading)
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-
     return useMutation<boolean, AxiosError<ApiError>, GenerateVoucherPayload>({
         mutationFn: async (payload) => {
-            if (isLoadingUser) throw new Error('Chargement du compte en cours...')
-            if (!isAuthenticated || !token) throw new Error('Utilisateur non authentifié.')
-
+            // L'intercepteur d'axios gère automatiquement l'ajout du token depuis le store
+            // Si le token n'est pas valide, l'API retournera une erreur 401
+            // et l'intercepteur déconnectera automatiquement l'utilisateur
             const response: AxiosResponse<Blob> = await api.post(
                 '/payments/vouchers/generate',
                 payload,
                 {
                     responseType: 'blob',
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         Accept: 'application/pdf',
                     },
                 },
@@ -41,22 +37,21 @@ export function useGenerateVoucher() {
             if (response.status !== 200) throw new Error('Erreur côté serveur.')
 
             const blob = new Blob([response.data], { type: 'application/pdf' })
-            const url = window.URL.createObjectURL(blob)
-            const link = document.createElement('a')
-            link.href = url
-            link.download = `bon_de_paiement_${payload.duration}mois.pdf`
-            document.body.appendChild(link)
-            link.click()
-            link.remove()
-            window.URL.revokeObjectURL(url)
+            downloadBlob(blob, `bon_de_paiement_${payload.duration}mois.pdf`)
 
             toast.success('Bon de paiement généré avec succès !')
             return true
         },
 
         onError: (error) => {
-            const message = error.response?.data?.message || error.message
-            toast.error(`Erreur génération PDF: ${message}`)
+            handleApiError(
+                error,
+                'Erreur génération PDF',
+                {
+                    onSubscriptionError: (message) => toast.error(message),
+                    onVoucherError: (message) => toast.error(message),
+                }
+            )
             console.error('useGenerateVoucher error:', error)
         },
     })

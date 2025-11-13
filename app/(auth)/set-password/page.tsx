@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+import { Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -8,7 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Eye, EyeOff, Lock } from 'lucide-react'
 import { useSetPassword } from '@/features/auth'
 import { useState } from 'react'
 
@@ -24,7 +26,7 @@ const schema = z
 
 type FormData = z.infer<typeof schema>
 
-export default function SetPasswordPage() {
+function SetPasswordForm() {
     const router = useRouter()
     const searchParams = useSearchParams()
     const userId = searchParams.get('userId')
@@ -64,10 +66,15 @@ export default function SetPasswordPage() {
 
     return (
         <main className="min-h-screen flex items-center justify-center bg-background px-4 transition-colors duration-300">
-            <section className="w-full max-w-md bg-surface shadow-card rounded-xl p-8 space-y-6 border border-border transition-colors duration-300">
+            <section className="w-full max-w-md bg-surface shadow-card rounded-[9px] p-8 space-y-6 border border-border transition-colors duration-300">
                 {/* 🔷 En-tête */}
                 <div className="flex flex-col items-center gap-2 text-center">
-                    <img src="/logo-upn.png" alt="Logo UPN" className="w-16 h-16" />
+                    <Image
+                        src="/logo-upn.png"
+                        alt="Logo UPN"
+                        width={64}
+                        height={64}
+                    />
                     <h1 className="text-2xl font-semibold text-text">Définir un mot de passe</h1>
                     <p className="text-sm text-text-secondary">
                         Créez votre mot de passe pour activer votre compte
@@ -87,7 +94,7 @@ export default function SetPasswordPage() {
                                 type={show ? 'text' : 'password'}
                                 placeholder="••••••••"
                                 {...register('password')}
-                                className="border border-border bg-surface text-text w-full rounded-md focus:ring-2 focus:ring-primary focus:outline-none pr-10"
+                                className="border border-border bg-surface text-text w-full rounded-[9px] focus:ring-2 focus:ring-primary focus:outline-none pr-10"
                             />
                             <button
                                 type="button"
@@ -112,7 +119,7 @@ export default function SetPasswordPage() {
                             type="password"
                             placeholder="••••••••"
                             {...register('confirmPassword')}
-                            className="border border-border bg-surface text-text w-full rounded-md focus:ring-2 focus:ring-primary focus:outline-none"
+                            className="border border-border bg-surface text-text w-full rounded-[9px] focus:ring-2 focus:ring-primary focus:outline-none"
                         />
                         {errors.confirmPassword && (
                             <p className="text-sm text-danger">{errors.confirmPassword.message}</p>
@@ -123,16 +130,37 @@ export default function SetPasswordPage() {
                     <Button
                         type="submit"
                         disabled={isPending}
-                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-lg py-2 shadow-button transition-all duration-200"
+                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200"
                     >
                         {isPending ? (
-                            <Loader2 className="animate-spin w-5 h-5" />
+                            <>
+                                <Loader2 className="animate-spin w-5 h-5" />
+                                Définition...
+                            </>
                         ) : (
-                            'Définir le mot de passe'
+                            <>
+                                <Lock className="w-5 h-5" />
+                                Définir le mot de passe
+                            </>
                         )}
                     </Button>
                 </form>
             </section>
         </main>
+    )
+}
+
+export default function SetPasswordPage() {
+    return (
+        <Suspense fallback={
+            <main className="min-h-screen flex items-center justify-center bg-background px-4">
+                <div className="flex flex-col items-center gap-2">
+                    <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                    <p className="text-sm text-text-secondary">Chargement...</p>
+                </div>
+            </main>
+        }>
+            <SetPasswordForm />
+        </Suspense>
     )
 }

@@ -1,6 +1,5 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
     Table,
     TableBody,
@@ -10,12 +9,13 @@ import {
     TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock, PauseCircle, Printer } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, PauseCircle, Printer, Ban, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useState } from 'react'
 import type { PaginationMeta } from '@/features/manager/hooks/useManagerSubscriptions'
 import { usePrintCardBySubscription } from '@/features/manager/hooks/useManagerSubscriptions'
 import { Subscription } from '@/types/subscription'
 import { SubscriptionCard } from './SubscriptionCard'
+import NumberedPagination from '@/components/ui/NumberedPagination'
 
 interface Props {
     subscriptions?: Subscription[]
@@ -73,7 +73,7 @@ export function SubscriptionList({
     return (
         <div className="w-full">
             {/* TABLE DESKTOP */}
-            <div className="hidden md:block rounded-lg border border-border bg-card">
+            <div className="hidden md:block rounded-[9px] border border-border bg-card">
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
@@ -117,13 +117,21 @@ export function SubscriptionList({
                                             {onSuspend && (
                                                 <Button
                                                     size="sm"
+                                                    variant="outline"
                                                     disabled={suspending}
                                                     onClick={() => onSuspend(s.id)}
+                                                    className="flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
                                                 >
                                                     {suspending ? (
-                                                        <Loader2 className="w-4 h-4 animate-spin mr-1" />
+                                                        <>
+                                                            <Loader2 className="w-4 h-4 animate-spin" />
+                                                            Suspension...
+                                                        </>
                                                     ) : (
-                                                        'Suspendre'
+                                                        <>
+                                                            <Ban className="w-4 h-4" />
+                                                            Suspendre
+                                                        </>
                                                     )}
                                                 </Button>
                                             )}
@@ -133,7 +141,7 @@ export function SubscriptionList({
                                                     variant="outline"
                                                     disabled={printingId === s.id || printCardMutation.isPending}
                                                     onClick={(e) => handlePrintClick(e, s.id)}
-                                                    className="flex items-center gap-1"
+                                                    className="flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
                                                 >
                                                     {printingId === s.id || printCardMutation.isPending ? (
                                                         <>
@@ -156,32 +164,7 @@ export function SubscriptionList({
                     </TableBody>
                 </Table>
 
-                {/* Pagination desktop */}
-                {meta && (
-                    <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
-                        <span>
-                            Page {meta.currentPage} / {meta.lastPage}
-                        </span>
-                        <div className="space-x-2">
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                disabled={meta.currentPage <= 1}
-                                onClick={() => onPageChange?.(meta.currentPage - 1)}
-                            >
-                                Précédent
-                            </Button>
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                disabled={meta.currentPage >= meta.lastPage}
-                                onClick={() => onPageChange?.(meta.currentPage + 1)}
-                            >
-                                Suivant
-                            </Button>
-                        </div>
-                    </div>
-                )}
+                
             </div>
 
             {/* 📱 CARTES MOBILE */}
@@ -201,30 +184,18 @@ export function SubscriptionList({
                     />
                 ))}
 
-                {meta && (
-                    <div className="flex justify-between items-center p-3 text-sm text-muted-foreground">
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={meta.currentPage <= 1}
-                            onClick={() => onPageChange?.(meta.currentPage - 1)}
-                        >
-                            Précédent
-                        </Button>
-                        <span>
-                            Page {meta.currentPage} / {meta.lastPage}
-                        </span>
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            disabled={meta.currentPage >= meta.lastPage}
-                            onClick={() => onPageChange?.(meta.currentPage + 1)}
-                        >
-                            Suivant
-                        </Button>
-                    </div>
-                )}
+                
             </div>
+            {/* Pagination unifiée */}
+            {meta && (
+                <div className="py-3">
+                    <NumberedPagination
+                        currentPage={meta.currentPage}
+                        totalPages={meta.lastPage}
+                        onPageChange={(p) => onPageChange?.(p)}
+                    />
+                </div>
+            )}
         </div>
     )
 }

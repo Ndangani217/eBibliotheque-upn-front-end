@@ -17,23 +17,58 @@ const config: Config = {
                 surface: 'var(--surface)',
                 text: 'var(--text)',
                 'text-secondary': 'var(--text-secondary)',
+                'text-muted': 'var(--text-muted)',
                 border: 'var(--border)',
                 ring: 'var(--ring)',
 
-                /* Identité UPN */
+                /* Identité UPN - Couleurs officielles */
                 primary: {
-                    DEFAULT: 'var(--color-primary)',
-                    dark: 'var(--color-primary-dark)',
+                    50: 'var(--color-primary-50)',
+                    100: 'var(--color-primary-100)',
+                    200: 'var(--color-primary-200)',
+                    300: 'var(--color-primary-300)',
+                    400: 'var(--color-primary-400)',
+                    DEFAULT: 'var(--color-primary-500)', // #002F6C
+                    600: 'var(--color-primary-600)',
+                    700: 'var(--color-primary-700)',
+                    800: 'var(--color-primary-800)',
+                    900: 'var(--color-primary-900)',
                 },
                 secondary: {
-                    DEFAULT: 'var(--color-secondary)',
-                    dark: 'var(--color-secondary-dark)',
+                    50: 'var(--color-secondary-50)',
+                    100: 'var(--color-secondary-100)',
+                    200: 'var(--color-secondary-200)',
+                    300: 'var(--color-secondary-300)',
+                    400: 'var(--color-secondary-400)',
+                    DEFAULT: 'var(--color-secondary-500)', // #FFCC00
+                    600: 'var(--color-secondary-600)',
+                    700: 'var(--color-secondary-700)',
+                    800: 'var(--color-secondary-800)',
+                    900: 'var(--color-secondary-900)',
                 },
 
-                /* États */
-                success: 'var(--color-success)',
-                warning: 'var(--color-warning)',
-                danger: 'var(--color-danger)',
+                /* États sémantiques */
+                success: {
+                    light: 'var(--color-success-light)',
+                    DEFAULT: 'var(--color-success)',
+                    dark: 'var(--color-success-dark)',
+                },
+                warning: {
+                    light: 'var(--color-warning-light)',
+                    DEFAULT: 'var(--color-warning)',
+                    dark: 'var(--color-warning-dark)',
+                },
+                error: {
+                    light: 'var(--color-error-light)',
+                    DEFAULT: 'var(--color-error)',
+                    dark: 'var(--color-error-dark)',
+                },
+                danger: 'var(--color-error)', // Alias pour compatibilité
+                info: {
+                    light: 'var(--color-info-light)',
+                    DEFAULT: 'var(--color-info)',
+                    dark: 'var(--color-info-dark)',
+                },
             },
 
             fontFamily: {
@@ -45,6 +80,7 @@ const config: Config = {
                 md: 'var(--radius-md)',
                 lg: 'var(--radius-lg)',
                 xl: 'var(--radius-xl)',
+                app: 'var(--radius-app)', // 9px - Rayon uniforme pour l'application
             },
 
             boxShadow: {

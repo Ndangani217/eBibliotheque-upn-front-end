@@ -7,11 +7,10 @@ import {
     useUnblockManager,
     useDeleteManager,
 } from '../hooks/useManagers'
-import { UserCards } from '@/features/admin/components/UserCards'
 import { UserTableHeader } from '@/features/admin/components/UserTableHeader'
 import CreateManagerModal from '@/features/admin/components/CreateManagerModal'
-import { Loader2, AlertTriangle } from 'lucide-react'
 import { UserListResponsive } from '@/features/admin/components/UserListResponsive'
+import { Loader2, AlertTriangle } from 'lucide-react'
 
 export default function AdminUsersPage() {
     const [search, setSearch] = useState('')

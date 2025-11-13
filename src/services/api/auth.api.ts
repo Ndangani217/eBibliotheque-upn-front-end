@@ -31,10 +31,12 @@ export interface RequestPasswordResetPayload {
 
 export interface ResetPasswordPayload {
     newPassword: string
+    newPassword_confirmation: string
 }
 
 export interface SetPasswordPayload {
     newPassword: string
+    newPassword_confirmation: string
 }
 
 export const authApi = {
@@ -78,6 +80,16 @@ export const authApi = {
     requestPasswordReset: async (payload: RequestPasswordResetPayload) => {
         const { data } = await api.post<ApiSuccessResponse>('/auth/forgot-password', payload)
         return data
+    },
+
+    /**
+     * Vérifie si un token de réinitialisation est valide
+     */
+    verifyResetToken: async (token: string) => {
+        const { data } = await api.get<ApiSuccessResponse<{ valid: boolean }>>(
+            `/auth/reset-password/${token}`,
+        )
+        return data.data
     },
 
     /**

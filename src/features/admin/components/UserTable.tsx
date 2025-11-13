@@ -24,7 +24,7 @@ interface Props {
 
 export function UserTable({ users, onBlock, onUnblock, onDelete }: Props) {
     return (
-        <div className="overflow-x-auto rounded-lg border border-border bg-surface shadow-card">
+        <div className="overflow-x-auto rounded-[9px] border border-border bg-surface shadow-card">
             <table className="w-full text-sm">
                 <thead className="bg-background border-b border-border text-left">
                     <tr>

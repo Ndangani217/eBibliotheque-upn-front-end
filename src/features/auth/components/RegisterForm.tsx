@@ -13,8 +13,7 @@ import {
     SelectItem,
     SelectValue,
 } from '@/components/ui/select'
-import { Loader2 } from 'lucide-react'
-import { theme } from '@/constants/theme'
+import { Loader2, UserPlus } from 'lucide-react'
 import { useAuth } from '../hooks/useAuth'
 import { SubscriberCategory } from '@/types/user'
 
@@ -77,7 +76,7 @@ export function RegisterForm() {
     }
 
     const baseInputClass =
-        'border p-2 w-full rounded-lg focus:ring-2 transition-all duration-200 border-[var(--border)] focus:ring-[var(--color-primary)]'
+        'border p-2 w-full rounded-[9px] focus:ring-2 transition-all duration-200 border-[var(--border)] focus:ring-[var(--color-primary)]'
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-4">
@@ -177,18 +176,18 @@ export function RegisterForm() {
             <Button
                 type="submit"
                 disabled={isRegistering}
-                className="w-full flex items-center justify-center gap-2 rounded-lg shadow-button transition-all duration-200 disabled:opacity-70"
-                style={{
-                    backgroundColor: theme.colors.primary,
-                    color: theme.colors.surface,
-                }}
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200 disabled:opacity-70"
             >
                 {isRegistering ? (
                     <>
-                        <Loader2 className="animate-spin w-4 h-4" /> Envoi...
+                        <Loader2 className="animate-spin w-5 h-5" />
+                        Envoi...
                     </>
                 ) : (
-                    "S'inscrire"
+                    <>
+                        <UserPlus className="w-5 h-5" />
+                        S&apos;inscrire
+                    </>
                 )}
             </Button>
         </form>

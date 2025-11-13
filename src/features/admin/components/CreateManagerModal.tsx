@@ -7,6 +7,7 @@ import { motion } from 'framer-motion'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Loader2, UserPlus } from 'lucide-react'
 import {
     Select,
     SelectTrigger,
@@ -107,10 +108,20 @@ export default function CreateManagerModal({ open, onClose }: Props) {
 
                     <Button
                         type="submit"
-                        className="w-full bg-primary text-white"
+                        className="w-full bg-primary text-white flex items-center justify-center gap-2"
                         disabled={mutation.isPending}
                     >
-                        {mutation.isPending ? 'Création...' : 'Créer le compte'}
+                        {mutation.isPending ? (
+                            <>
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                                Création...
+                            </>
+                        ) : (
+                            <>
+                                <UserPlus className="w-4 h-4" />
+                                Créer le compte
+                            </>
+                        )}
                     </Button>
                 </motion.form>
             </DialogContent>

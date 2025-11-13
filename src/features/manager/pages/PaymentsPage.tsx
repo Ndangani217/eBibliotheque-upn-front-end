@@ -12,7 +12,7 @@ export default function PaymentsPage() {
             className="p-6 space-y-6"
         >
             {/* === Contenu === */}
-            <section className="bg-card border border-border rounded-xl shadow-sm p-4 md:p-6">
+            <section className="bg-card border border-border rounded-[9px] shadow-sm p-4 md:p-6">
                 <PaymentTabs />
             </section>
         </motion.main>

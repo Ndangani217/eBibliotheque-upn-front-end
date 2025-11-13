@@ -45,7 +45,7 @@ export default function SubscriberDashboard() {
                 {/*Paiements validés */}
                 <motion.div
                     whileHover={{ scale: 1.03 }}
-                    className="bg-surface border border-border shadow-card rounded-xl p-6 text-center flex flex-col items-center justify-center"
+                    className="bg-surface border border-border shadow-card rounded-[9px] p-6 text-center flex flex-col items-center justify-center"
                 >
                     <DollarSign className="w-8 h-8 text-primary mb-2" />
                     <p className={`${typography.h2} text-primary`}>{totalPaid}</p>
@@ -55,7 +55,7 @@ export default function SubscriberDashboard() {
                 {/* Carte active */}
                 <motion.div
                     whileHover={{ scale: 1.03 }}
-                    className="bg-surface border border-border shadow-card rounded-xl p-6 text-center flex flex-col items-center justify-center"
+                    className="bg-surface border border-border shadow-card rounded-[9px] p-6 text-center flex flex-col items-center justify-center"
                 >
                     <CreditCard className="w-8 h-8 text-primary mb-2" />
                     <p className={`${typography.h2} text-primary`}>{isCardActive}</p>
@@ -65,7 +65,7 @@ export default function SubscriberDashboard() {
                 {/* Date d’expiration */}
                 <motion.div
                     whileHover={{ scale: 1.03 }}
-                    className="bg-surface border border-border shadow-card rounded-xl p-6 text-center flex flex-col items-center justify-center"
+                    className="bg-surface border border-border shadow-card rounded-[9px] p-6 text-center flex flex-col items-center justify-center"
                 >
                     <Calendar className="w-8 h-8 text-primary mb-2" />
                     <p className={`${typography.h2} text-primary`}>{expiryDate}</p>

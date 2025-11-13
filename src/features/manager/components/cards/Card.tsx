@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { Card as UICard, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, PauseCircle, Printer } from 'lucide-react'
+import { Loader2, CheckCircle, PauseCircle, Printer, Ban } from 'lucide-react'
 import { formatDateSafe } from '@/utils/date'
 import type { LibraryCard } from '@/types/card'
 import { usePrintCard } from '@/features/manager/hooks/useManagerCards'
@@ -68,17 +68,20 @@ export function CardItem({ card, onSuspend, suspending }: CardItemProps) {
                             <Button
                                 variant="destructive"
                                 size="sm"
-                                className="w-full"
+                                className="w-full flex items-center justify-center gap-2"
                                 onClick={() => onSuspend?.(id)}
                                 disabled={suspending}
                             >
                                 {suspending ? (
                                     <>
-                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                        <Loader2 className="w-4 h-4 animate-spin" />
                                         Suspension...
                                     </>
                                 ) : (
-                                    'Suspendre'
+                                    <>
+                                        <Ban className="w-4 h-4" />
+                                        Suspendre
+                                    </>
                                 )}
                             </Button>
                         )}

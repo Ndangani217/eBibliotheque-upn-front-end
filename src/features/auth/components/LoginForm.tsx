@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, Eye, EyeOff } from 'lucide-react'
+import { Loader2, Eye, EyeOff, LogIn } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function LoginForm() {
@@ -50,7 +50,7 @@ export function LoginForm() {
                     placeholder="upnrdc@upn.ac.cd"
                     value={form.email}
                     onChange={handleChange}
-                    className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
+                    className="border border-border bg-surface text-text rounded-[9px] focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200"
                     required
                 />
                 {errors.email && <p className="text-sm text-danger">{errors.email}</p>}
@@ -69,7 +69,7 @@ export function LoginForm() {
                         placeholder="••••••••"
                         value={form.password}
                         onChange={handleChange}
-                        className="border border-border bg-surface text-text rounded-md focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200 pr-10"
+                        className="border border-border bg-surface text-text rounded-[9px] focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200 pr-10"
                         required
                     />
                     <button
@@ -97,7 +97,7 @@ export function LoginForm() {
             <Button
                 type="submit"
                 disabled={isLoggingIn}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-lg py-2 shadow-button transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
             >
                 {isLoggingIn ? (
                     <>
@@ -105,7 +105,10 @@ export function LoginForm() {
                         Connexion...
                     </>
                 ) : (
-                    'Se connecter'
+                    <>
+                        <LogIn size={18} />
+                        Se connecter
+                    </>
                 )}
             </Button>
         </form>

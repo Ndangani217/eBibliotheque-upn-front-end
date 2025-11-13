@@ -95,7 +95,7 @@ export function SubscriptionTabs() {
 
             {/* Onglets */}
             <Tabs value={tab} onValueChange={(v) => setTab(v as 'valide' | 'expire' | 'suspendu')} className="w-full">
-                <TabsList className="grid grid-cols-3 w-full mb-4 bg-muted/40 rounded-lg">
+                <TabsList className="grid grid-cols-3 w-full mb-4 bg-muted/40 rounded-[9px]">
                     {[
                         { key: 'valide', label: 'Actifs', count: activeSubs.data?.meta.total },
                         { key: 'expire', label: 'Expirés', count: expiredSubs.data?.meta.total },

@@ -9,9 +9,8 @@ import { ExportExcelDialog } from '@/features/manager/components/ExportExcelDial
 import { PaymentList } from './PaymentList'
 import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
-import { Search } from 'lucide-react'
+import { Search, CreditCard } from 'lucide-react'
 import { ConfirmDialog } from '@/components/ui/confirmDialog'
-import { Loader2, CreditCard } from 'lucide-react'
 
 export function PaymentTabs() {
     const [tab, setTab] = useState<'en_attente' | 'paye'>('en_attente')
@@ -79,7 +78,7 @@ export function PaymentTabs() {
                 onValueChange={(v) => setTab(v as 'en_attente' | 'paye')}
                 className="w-full"
             >
-                <TabsList className="grid grid-cols-2 w-full mb-4 bg-muted/40 rounded-lg">
+                <TabsList className="grid grid-cols-2 w-full mb-4 bg-muted/40 rounded-[9px]">
                     <TabsTrigger
                         value="en_attente"
                         className="relative data-[state=active]:bg-primary/10 data-[state=active]:text-primary"
