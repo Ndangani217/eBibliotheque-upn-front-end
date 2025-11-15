@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/features/auth'
 import { useLogout } from '@/features/auth'
 import { Bell, Menu, LogOut, User } from 'lucide-react'
@@ -22,6 +23,19 @@ type HeaderProps = {
 export default function Header({ onMenuClick }: HeaderProps) {
     const { user } = useAuthStore()
     const logoutMutation = useLogout()
+
+    // Date/heure du jour (mise à jour automatique)
+    const [now, setNow] = useState<Date>(new Date())
+    useEffect(() => {
+        const id = setInterval(() => setNow(new Date()), 1000) // mise à jour chaque seconde
+        return () => clearInterval(id)
+    }, [])
+    const formattedDate = `${now.toLocaleDateString('fr-FR', {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+    })} — ${now.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}`
 
     /** Traduction du rôle utilisateur */
     const roleLabel =
@@ -54,6 +68,11 @@ export default function Header({ onMenuClick }: HeaderProps) {
                         {user.firstName} {user.lastName} · {roleLabel}
                     </span>
                 )}
+            </div>
+
+            {/* Date et heure du jour */}
+            <div className="hidden md:flex items-center text-sm text-text-secondary">
+                <span className="whitespace-nowrap">{formattedDate}</span>
             </div>
 
             {/* Notifications + Profil */}

@@ -3,8 +3,8 @@
 
 export const colors = {
     /** Identité UPN */
-    primary: '#60A5FA', // Bleu ciel professionnel
-    primaryDark: '#3B82F6', // Bleu plus profond (hover)
+	primary: '#002F6C', // Bleu institutionnel UPN
+	primaryDark: '#0033CC', // Variante plus vive pour le hover/accents
     secondary: '#FACC15', // Jaune UPN (accent)
     secondaryDark: '#EAB308', // Jaune chaud (contraste)
 

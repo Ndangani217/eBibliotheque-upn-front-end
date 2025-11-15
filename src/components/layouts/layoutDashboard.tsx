@@ -52,7 +52,7 @@ export default function LayoutDashboard({ children }: { children: React.ReactNod
                                 stiffness: 120,
                                 damping: 20,
                             }}
-                            className="fixed inset-0 w-64 bg-surface border-r border-border z-[70] shadow-lg"
+                            className="fixed inset-0 w-56 bg-surface border-r border-border z-[70] shadow-lg"
                         >
                             <Sidebar onLinkClick={() => setDrawerOpen(false)} />
                         </motion.aside>
@@ -63,11 +63,11 @@ export default function LayoutDashboard({ children }: { children: React.ReactNod
             {/* Contenu principal */}
             <div
                 className={`flex-1 flex flex-col transition-all duration-300 ${
-                    isMobile ? '' : sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+                    isMobile ? '' : sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-56'
                 }`}
             >
                 <Header onMenuClick={() => setDrawerOpen(true)} />
-                <main className="flex-1 p-4 sm:p-6 md:p-8 bg-surface shadow-inner transition-all duration-300">
+				<main className="flex-1 px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 py-4 sm:py-6 md:py-8 bg-background transition-all duration-300">
                     {children}
                 </main>
                 <footer className="text-center py-4 text-sm text-text-secondary border-t border-border bg-surface">

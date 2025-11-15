@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { typography } from '@/constants/theme'
 import { formatDate } from '@/utils/date'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface VerifyResponse {
     valid: boolean
@@ -85,7 +86,7 @@ export default function VerifyCardPage() {
                         <strong>Détenteur :</strong> {card.subscriber}
                     </p>
                     <p>
-                        <strong>Catégorie :</strong> {card.category}
+                        <strong>Catégorie :</strong> {getCategoryLabel(card.category)}
                     </p>
                     <p>
                         <strong>Référence :</strong> {card.reference}

@@ -49,7 +49,14 @@ export function UserTable({ users, onBlock, onUnblock, onDelete, onEdit }: Props
                                         {user.phoneNumber || '—'}
                                     </span>
                                 </TableCell>
-                                <TableCell className="capitalize text-text-secondary">{user.role}</TableCell>
+								<TableCell className="text-text-secondary">
+									{({
+										admin: 'Administrateur',
+										manager: 'Gestionnaire',
+										manager_viewer: 'Gestionnaire (vue seule)',
+										subscriber: 'Abonné',
+									} as Record<string, string>)[user.role] ?? user.role}
+								</TableCell>
                                 <TableCell>
                                     <Badge
                                         className={`rounded-[9px] ${

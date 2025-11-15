@@ -4,12 +4,12 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usersApi } from '@/services/api'
 
 /**Hook corrigé et typé */
-export function useManagers(search?: string) {
+export function useManagers(search?: string, page = 1, limit = 10) {
     return useQuery({
-        queryKey: ['managers', search],
+		queryKey: ['managers', search, page, limit],
         queryFn: async () => {
-            const result = await usersApi.list({ search })
-            return result.items
+			const result = await usersApi.list({ search, page, limit })
+			return result
         },
     })
 }

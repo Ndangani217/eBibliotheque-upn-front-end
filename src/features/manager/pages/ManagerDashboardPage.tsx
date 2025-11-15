@@ -7,6 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAuthStore } from '@/features/auth'
 import api from '@/services/api'
 import { theme } from '@/constants/theme'
+import {
+	ResponsiveContainer,
+	CartesianGrid,
+	XAxis,
+	YAxis,
+	Tooltip,
+	Legend,
+	AreaChart,
+	Area,
+	LineChart,
+	Line,
+} from 'recharts'
+import { useDashboardCharts } from '@/features/manager/hooks/useDashboardCharts'
+import { useActivityLogs } from '@/features/manager/hooks/useActivityLogs'
 
 export default function ManagerDashboardPage() {
     const { user } = useAuthStore()
@@ -37,8 +51,11 @@ export default function ManagerDashboardPage() {
         )
     }
 
-    return (
-        <section className="space-y-8">
+	const { data: charts } = useDashboardCharts()
+	const { data: logs } = useActivityLogs(1, 5)
+
+	return (
+		<section className="space-y-6">
             {/* ===== Titre principal ===== */}
             <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
@@ -92,7 +109,7 @@ export default function ManagerDashboardPage() {
                             title: 'Cartes générées',
                             value: stats.activeSubscriptions + stats.expiredSubscriptions,
                             icon: BookOpen,
-                            color: theme.colors.info,
+							color: theme.colors.primary,
                         },
                     ].map(({ title, value, icon: Icon, color }, i) => (
                         <motion.div
@@ -123,35 +140,70 @@ export default function ManagerDashboardPage() {
             )}
 
             {/* ===== Section analytique ===== */}
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10"
-            >
-                <Card className="shadow-card border-border">
-                    <CardHeader>
-                        <CardTitle>Tendance des abonnements</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-text-secondary">
-                            (Graphique à venir) — courbe mensuelle des abonnements actifs vs
-                            expirés.
-                        </p>
-                    </CardContent>
-                </Card>
+			<motion.div
+				initial={{ opacity: 0, y: 20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ delay: 0.3 }}
+				className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6"
+			>
+				<Card className="border border-border bg-surface">
+					<CardHeader>
+						<CardTitle className="text-text">Tendance des abonnements</CardTitle>
+					</CardHeader>
+					<CardContent className="h-64">
+						<ResponsiveContainer width="100%" height="100%">
+							<AreaChart data={charts?.subscriptionTrend ?? []}>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis dataKey="month" />
+								<YAxis allowDecimals={false} />
+								<Tooltip />
+								<Legend />
+								<Area type="monotone" dataKey="actifs" name="Actifs" stroke={theme.colors.success} fill={`${theme.colors.success}33`} />
+								<Area type="monotone" dataKey="expires" name="Expirés" stroke={theme.colors.danger} fill={`${theme.colors.danger}33`} />
+							</AreaChart>
+						</ResponsiveContainer>
+					</CardContent>
+				</Card>
 
-                <Card className="shadow-card border-border">
-                    <CardHeader>
-                        <CardTitle>Activité des paiements</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <p className="text-sm text-text-secondary">
-                            (Graphique à venir) — évolution des paiements validés et en attente.
-                        </p>
-                    </CardContent>
-                </Card>
-            </motion.div>
+				<Card className="border border-border bg-surface">
+					<CardHeader>
+						<CardTitle className="text-text">Activité des paiements</CardTitle>
+					</CardHeader>
+					<CardContent className="h-64">
+						<ResponsiveContainer width="100%" height="100%">
+							<LineChart data={charts?.paymentActivity ?? []}>
+								<CartesianGrid strokeDasharray="3 3" />
+								<XAxis dataKey="month" />
+								<YAxis allowDecimals={false} />
+								<Tooltip />
+								<Legend />
+								<Line type="monotone" dataKey="payes" name="Validés" stroke={theme.colors.primary} strokeWidth={2} />
+								<Line type="monotone" dataKey="enAttente" name="En attente" stroke={theme.colors.warning} strokeWidth={2} />
+							</LineChart>
+						</ResponsiveContainer>
+					</CardContent>
+				</Card>
+
+				<Card className="border border-border bg-surface">
+					<CardHeader>
+						<CardTitle className="text-text">Historique récent</CardTitle>
+					</CardHeader>
+					<CardContent>
+						{logs?.data?.length ? (
+							<ul className="space-y-2 text-sm">
+								{logs.data.map((l) => (
+									<li key={l.id} className="flex justify-between border-b border-border/60 pb-2">
+										<span className="text-text">{l.action.replaceAll('_', ' ')}</span>
+										<span className="text-text-secondary">{new Date(l.createdAt).toLocaleString('fr-FR')}</span>
+									</li>
+								))}
+							</ul>
+						) : (
+							<p className="text-text-secondary text-sm">Aucune activité récente.</p>
+						)}
+					</CardContent>
+				</Card>
+			</motion.div>
         </section>
     )
 }

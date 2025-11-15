@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Mail, KeyRound, Ban, CheckCircle, UserX } from 'lucide-react'
 import type { User } from '@/types/user'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface Props {
     subscribers: User[]
@@ -65,7 +66,7 @@ export function SubscriberTable({
                                             : 'bg-secondary/10 text-secondary'
                                     }`}
                                 >
-                                    {subscriber.category === 'student' ? 'Étudiant' : 'Chercheur'}
+                                    {getCategoryLabel(subscriber.category)}
                                 </Badge>
                             ) : (
                                 <span className="text-text-secondary">-</span>

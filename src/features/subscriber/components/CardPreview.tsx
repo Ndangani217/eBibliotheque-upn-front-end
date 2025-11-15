@@ -1,10 +1,11 @@
 'use client'
 
 import { QRCodeCanvas } from 'qrcode.react'
-import Image from 'next/image'
 import { formatDate } from '@/utils/date'
 import { useCard } from '@/features/subscriber/hooks/useCard'
 import { typography } from '@/constants/theme'
+import { CreditCard } from 'lucide-react'
+import { getCategoryLabel } from '@/utils/labels'
 
 export default function CardPreview() {
     const { data: card, isLoading } = useCard()
@@ -15,9 +16,12 @@ export default function CardPreview() {
 
     if (!card) {
         return (
-            <p className={`${typography.small} text-center text-text-secondary mt-10`}>
-                Aucune carte active pour le moment.
-            </p>
+			<div className="mt-10 flex flex-col items-center justify-center text-center">
+				<CreditCard className="w-16 h-16 text-gray-400 mb-3" />
+				<p className={`${typography.small} text-text-secondary`}>
+					Aucune carte active pour le moment.
+				</p>
+			</div>
         )
     }
 
@@ -25,84 +29,74 @@ export default function CardPreview() {
     const verifyUrl = `https://ebibliotheque-upn.cd/verify/${card.unique_code}`
 
     return (
-        <section className="flex justify-center mt-10 px-4">
-            <div
-                className={`
-          relative w-full max-w-sm rounded-[9px] shadow-xl overflow-hidden
-          bg-gradient-to-br from-blue-500/90 to-sky-400/80 text-white
-          p-6 sm:p-8 transform transition-all hover:scale-[1.02]
-        `}
-            >
-                {/* Logo UPN en haut à droite */}
-                <div className="absolute top-4 right-4">
-                    <Image
-                        src="/logo-upn.png"
-                        alt="Logo UPN"
-                        width={80}
-                        height={40}
-                        className="object-contain"
-                    />
-                </div>
-
-                {/* En-tête */}
-                <h2 className="text-center text-2xl sm:text-3xl font-semibold tracking-wide mb-4 drop-shadow">
+        <section className="w-full flex justify-center items-start px-4 md:px-0 py-4 md:py-6">
+            <div className="w-full max-w-[380px]">
+                <div
+                    className="
+                        w-full border border-[#002B7F] rounded-none
+                        bg-[linear-gradient(160deg,#003399_0%,#0049C6_45%,#002B7F_100%)]
+                        text-white shadow-[0_0_15px_rgba(0,0,0,0.15)]
+                        p-5 md:p-6 space-y-5
+                    "
+                >
+                    {/* En-tête */}
+                    <h2 className="text-center text-2xl md:text-3xl font-semibold tracking-wide whitespace-nowrap">
                     Carte d&apos;abonnement
                 </h2>
 
-                {/* QR Code dynamique */}
-                <div className="flex justify-center">
-                    <div className="bg-white p-2 rounded-[9px] shadow-md">
-                        <QRCodeCanvas
-                            value={verifyUrl}
-                            size={160}
-                            bgColor="#FFFFFF"
-                            fgColor="#000000"
-                            level="H"
-                            includeMargin={true}
-                        />
+                    {/* QR Code dynamique */}
+                    <div className="flex justify-center">
+                        <div className="mx-auto w-[120px] h-[120px] md:w-[160px] md:h-[160px] bg-white rounded-none p-2 flex items-center justify-center">
+                            <QRCodeCanvas
+                                value={verifyUrl}
+                                size={140}
+                                bgColor="#FFFFFF"
+                                fgColor="#000000"
+                                level="H"
+                                includeMargin={true}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {/* Infos principales */}
-                <div className="text-center mt-5 space-y-1">
-                    <p className="uppercase font-bold tracking-wider text-lg sm:text-xl">
-                        {card.subscription?.category === 'student'
-                            ? 'ÉTUDIANT'
-                            : card.subscription?.category === 'researcher'
-                            ? 'CHERCHEUR'
-                            : card.subscription?.category?.toUpperCase() || '—'}
-                    </p>
+                    {/* Infos principales */}
+                    <div className="text-center space-y-2">
+                        <p className="uppercase font-semibold tracking-wider text-lg md:text-xl">
+                            {getCategoryLabel(card.subscription?.category).toUpperCase()}
+                        </p>
 
-                    <p className="text-sm sm:text-base">
-                        Valide du{' '}
-                        <span className="font-semibold">
-                            {formatDate(card.subscription?.start_date)}
-                        </span>{' '}
-                        au{' '}
-                        <span className="font-semibold">
-                            {formatDate(card.subscription?.end_date)}
-                        </span>
-                    </p>
-                </div>
+                        <p className="text-sm md:text-base">
+                            Valide du{' '}
+                            <span className="font-semibold">
+                                {formatDate(card.subscription?.start_date)}
+                            </span>{' '}
+                            au{' '}
+                            <span className="font-semibold">
+                                {formatDate(card.subscription?.end_date)}
+                            </span>
+                        </p>
+                    </div>
 
-                {/* Statut */}
-                <div
-                    className={`mt-6 mx-auto w-fit px-5 py-2 rounded-full font-medium text-sm sm:text-base ${
-                        isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-700'
-                    }`}
-                >
-                    Statut : {isActive ? 'Active' : 'Inactive'}
-                </div>
+                    {/* Statut */}
+                    <div
+                        className={`mx-auto w-fit px-4 md:px-6 py-1 md:py-2 font-medium text-sm md:text-base rounded-none ${
+                            isActive
+                                ? 'bg-[#2ECC71] text-[#1A1A1A]'
+                                : 'bg-[#E74C3C] text-white'
+                        }`}
+                    >
+                        Statut : {isActive ? 'Active' : 'Inactive'}
+                    </div>
 
-                {/* Signature officielle UPN */}
-                <div className="mt-6 text-center space-y-1">
-                    <p className="text-xs font-bold text-white/90">Signature officielle UPN</p>
-                    <p className="text-xs text-white/70">Université Pédagogique Nationale</p>
-                </div>
+                    {/* Signature officielle UPN */}
+                    <div className="text-center space-y-1">
+                        <p className="text-xs md:text-sm font-bold text-white/90">Signature officielle UPN</p>
+                        <p className="text-xs md:text-sm text-white/70">Université Pédagogique Nationale</p>
+                    </div>
 
-                {/* Bas de carte */}
-                <div className="absolute bottom-3 right-4 text-xs text-white/80">
-                    © Bibliothèque UPN
+                    {/* Bas de carte */}
+                    <div className="text-center text-xs md:text-sm text-white/80">
+                        © Bibliothèque UPN
+                    </div>
                 </div>
             </div>
         </section>

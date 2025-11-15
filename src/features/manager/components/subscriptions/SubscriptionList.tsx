@@ -10,6 +10,7 @@ import { Subscription } from '@/types/subscription'
 import { SubscriptionCard } from './SubscriptionCard'
 import NumberedPagination from '@/components/ui/NumberedPagination'
 import { formatDate } from '@/utils/date'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface Props {
     subscriptions?: Subscription[]
@@ -83,7 +84,7 @@ export function SubscriptionList({
                         {subscriptions.map((s) => (
                             <TableRow key={s.id}>
                                 <TableCell className="font-medium text-text">{s.subscriberName}</TableCell>
-                                <TableCell className="capitalize text-text-secondary">{s.category ?? '—'}</TableCell>
+                                <TableCell className="text-text-secondary">{getCategoryLabel(s.category)}</TableCell>
                                 <TableCell className="text-text-secondary">{formatDate(s.startDate)}</TableCell>
                                 <TableCell className="text-text-secondary">{formatDate(s.endDate)}</TableCell>
                                 <TableCell>

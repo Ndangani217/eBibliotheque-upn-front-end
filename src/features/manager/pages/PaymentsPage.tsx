@@ -5,16 +5,15 @@ import { PaymentTabs } from '../components/payments/PaymentTabs'
 
 export default function PaymentsPage() {
     return (
-        <motion.main
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="p-6 space-y-6"
-        >
-            {/* === Contenu === */}
-            <section className="bg-card border border-border rounded-[9px] shadow-sm p-4 md:p-6">
-                <PaymentTabs />
-            </section>
-        </motion.main>
+		<motion.section
+			initial={{ opacity: 0, y: 10 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.4 }}
+			className="space-y-6"
+		>
+			<div className="border border-border bg-surface p-4 md:p-6">
+				<PaymentTabs />
+			</div>
+		</motion.section>
     )
 }

@@ -42,24 +42,27 @@ export default function SubscribersPage() {
         await updateEmailMutation.mutateAsync({ id, email })
     }
 
-    const [confirmState, setConfirmState] = useState<{ open: boolean; type: 'block' | 'unblock'; id: string | null }>({
+    const [confirmState, setConfirmState] = useState<{ open: boolean; type: 'block' | 'unblock' | 'reset'; id: string | null }>({
         open: false,
         type: 'block',
         id: null,
     })
 
-    const openConfirm = (type: 'block' | 'unblock', id: string) =>
+    const openConfirm = (type: 'block' | 'unblock' | 'reset', id: string) =>
         setConfirmState({ open: true, type, id })
 
     const handleBlock = (id: string) => openConfirm('block', id)
     const handleUnblock = (id: string) => openConfirm('unblock', id)
+    const handleSendReset = (id: string) => openConfirm('reset', id)
 
     const handleConfirm = () => {
         if (!confirmState.id) return
         if (confirmState.type === 'block') {
             blockMutation.mutate(confirmState.id)
-        } else {
+        } else if (confirmState.type === 'unblock') {
             unblockMutation.mutate(confirmState.id)
+        } else if (confirmState.type === 'reset') {
+            sendPasswordResetMutation.mutate(confirmState.id)
         }
         setConfirmState({ ...confirmState, open: false, id: null })
     }
@@ -92,7 +95,7 @@ export default function SubscribersPage() {
                     onBlock={handleBlock}
                     onUnblock={handleUnblock}
                     onEditEmail={handleEditEmail}
-                    onSendPasswordReset={(id) => sendPasswordResetMutation.mutate(id)}
+                    onSendPasswordReset={handleSendReset}
                 />
 
                 {meta && meta.lastPage >= 1 && (
@@ -121,14 +124,35 @@ export default function SubscribersPage() {
                 open={confirmState.open}
                 onCancel={() => setConfirmState({ ...confirmState, open: false })}
                 onConfirm={handleConfirm}
-                title={confirmState.type === 'block' ? "Bloquer l'utilisateur ?" : "Débloquer l'utilisateur ?"}
+                title={
+                    confirmState.type === 'block'
+                        ? "Bloquer l'utilisateur ?"
+                        : confirmState.type === 'unblock'
+                        ? "Débloquer l'utilisateur ?"
+                        : "Envoyer le lien de réinitialisation ?"
+                }
                 description={
                     confirmState.type === 'block'
                         ? "Cet abonné ne pourra plus accéder à son compte."
-                        : "L'abonné pourra se reconnecter normalement."
+                        : confirmState.type === 'unblock'
+                        ? "L'abonné pourra se reconnecter normalement."
+                        : "Un e-mail sécurisé sera envoyé à l’abonné pour réinitialiser son mot de passe."
                 }
-                confirmLabel={confirmState.type === 'block' ? 'Confirmer le blocage' : 'Confirmer'}
+                confirmLabel={
+                    confirmState.type === 'block'
+                        ? 'Confirmer le blocage'
+                        : confirmState.type === 'unblock'
+                        ? 'Confirmer'
+                        : 'Envoyer le lien'
+                }
                 danger={confirmState.type === 'block'}
+                confirmLoading={
+                    confirmState.type === 'block'
+                        ? blockMutation.isPending
+                        : confirmState.type === 'unblock'
+                        ? unblockMutation.isPending
+                        : sendPasswordResetMutation.isPending
+                }
             />
         </section>
     )

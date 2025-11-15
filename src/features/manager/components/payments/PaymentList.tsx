@@ -7,6 +7,7 @@ import { Loader2, CheckCircle, Clock, Check } from 'lucide-react'
 import type { Payment, PaginationMeta } from '@/features/manager/hooks/useManagerPayments'
 import NumberedPagination from '@/components/ui/NumberedPagination'
 import { formatDate } from '@/utils/date'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface Props {
     payments?: Payment[]
@@ -64,7 +65,7 @@ export function PaymentList({
                             <TableRow key={p.id}>
                                 <TableCell className="font-medium text-text">{p.referenceCode}</TableCell>
                                 <TableCell className="text-text">{p.subscriberName}</TableCell>
-                                <TableCell className="capitalize text-text-secondary">{p.category ?? '—'}</TableCell>
+                                <TableCell className="text-text-secondary">{getCategoryLabel(p.category)}</TableCell>
                                 <TableCell className="text-text-secondary">{p.amount} USD</TableCell>
                                 <TableCell>
                                     {p.status === 'paye' ? (
@@ -126,7 +127,7 @@ export function PaymentList({
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span>Catégorie :</span>
-                                <span className="capitalize">{p.category ?? '—'}</span>
+                                <span>{getCategoryLabel(p.category)}</span>
                             </div>
                             <div className="flex justify-between text-sm">
                                 <span>Statut :</span>

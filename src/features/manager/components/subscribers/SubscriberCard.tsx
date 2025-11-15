@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Mail, KeyRound, Ban, CheckCircle, Phone } from 'lucide-react'
 import type { User } from '@/types/user'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface Props {
     subscriber: User
@@ -67,7 +68,7 @@ export function SubscriberCard({
                                     : 'bg-secondary/10 text-secondary'
                             }`}
                         >
-                            {subscriber.category === 'student' ? 'Étudiant' : 'Chercheur'}
+                            {getCategoryLabel(subscriber.category)}
                         </Badge>
                     </p>
                 )}

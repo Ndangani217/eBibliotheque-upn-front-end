@@ -13,6 +13,7 @@ import { Loader2, PauseCircle, CheckCircle, Printer } from 'lucide-react'
 import { CardItem } from './Card'
 import { LibraryCard, CardStatus } from '@/types/card'
 import { usePrintCard } from '@/features/manager/hooks/useManagerCards'
+import { getCategoryLabel } from '@/utils/labels'
 
 interface Props {
     cards?: LibraryCard[]
@@ -72,7 +73,7 @@ export function CardList({
                         {cards.map((c) => (
                             <TableRow key={c.id}>
                                 <TableCell className="font-medium">{c.subscriberName}</TableCell>
-                                <TableCell className="capitalize">{c.category ?? '—'}</TableCell>
+                                <TableCell>{getCategoryLabel(c.category)}</TableCell>
                                 <TableCell>
                                     {new Date(c.issuedAt).toLocaleDateString('fr-FR')}
                                 </TableCell>

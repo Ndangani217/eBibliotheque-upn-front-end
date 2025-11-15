@@ -41,7 +41,7 @@ export function UserTableHeader({ onAdd, onSearch }: Props) {
                 <div className="relative w-full sm:w-64">
                     <Search className="absolute left-2 top-2.5 text-gray-400 w-4 h-4" />
                     <Input
-                        placeholder="Rechercher un utilisateur..."
+						placeholder="Rechercher un utilisateur ou une adresse e‑mail..."
                         value={value}
                         onChange={(e) => setValue(e.target.value)}
                         className="pl-8"
@@ -54,7 +54,7 @@ export function UserTableHeader({ onAdd, onSearch }: Props) {
                     className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200"
                 >
                     <Plus className="w-4 h-4" />
-                    Ajouter
+                    Ajouter un manager
                 </Button>
             </div>
         </header>
