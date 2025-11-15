@@ -35,6 +35,7 @@ export function useSubscribers(params: SubscribersParams = {}) {
             })
             return data.data
         },
+        placeholderData: (prev) => prev,
     })
 }
 

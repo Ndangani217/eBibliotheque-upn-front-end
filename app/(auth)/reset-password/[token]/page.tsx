@@ -13,6 +13,7 @@ import { useResetPassword } from '@/features/auth'
 import { useState, useEffect } from 'react'
 import { authApi } from '@/services/api'
 import { toast } from 'sonner'
+import { isAxiosError } from 'axios'
 
 // Désactiver le pré-rendu pour cette page dynamique
 export const dynamic = 'force-dynamic'
@@ -60,9 +61,9 @@ export default function ResetPasswordPage() {
             try {
                 await authApi.verifyResetToken(token)
                 setIsTokenValid(true)
-            } catch (error: any) {
+            } catch (error: unknown) {
                 setIsTokenValid(false)
-                if (error.response?.status === 404) {
+                if (isAxiosError(error) && error.response?.status === 404) {
                     toast.error('Lien de réinitialisation invalide ou expiré.')
                     setTimeout(() => router.push('/forgot-password'), 2000)
                 }

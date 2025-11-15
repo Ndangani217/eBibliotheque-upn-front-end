@@ -108,7 +108,7 @@ export default function CreateManagerModal({ open, onClose }: Props) {
 
                     <Button
                         type="submit"
-                        className="w-full bg-primary text-white flex items-center justify-center gap-2"
+                        className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200"
                         disabled={mutation.isPending}
                     >
                         {mutation.isPending ? (

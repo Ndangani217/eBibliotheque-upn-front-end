@@ -11,6 +11,8 @@ import { UserTableHeader } from '@/features/admin/components/UserTableHeader'
 import CreateManagerModal from '@/features/admin/components/CreateManagerModal'
 import { UserListResponsive } from '@/features/admin/components/UserListResponsive'
 import { Loader2, AlertTriangle } from 'lucide-react'
+import type { User } from '@/types/user'
+import EditManagerModal from '@/features/admin/components/EditManagerModal'
 
 export default function AdminUsersPage() {
     const [search, setSearch] = useState('')
@@ -20,6 +22,8 @@ export default function AdminUsersPage() {
     const unblockMutation = useUnblockManager()
     const deleteMutation = useDeleteManager()
     const [showAddModal, setShowAddModal] = useState(false)
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [selectedUser, setSelectedUser] = useState<User | null>(null)
 
     if (isLoading) {
         return (
@@ -48,9 +52,18 @@ export default function AdminUsersPage() {
                 onBlock={(id) => blockMutation.mutate(id)}
                 onUnblock={(id) => unblockMutation.mutate(id)}
                 onDelete={(id) => deleteMutation.mutate(id)}
+                onEdit={(user) => {
+                    setSelectedUser(user)
+                    setShowEditModal(true)
+                }}
             />
 
             <CreateManagerModal open={showAddModal} onClose={() => setShowAddModal(false)} />
+            <EditManagerModal
+                open={showEditModal}
+                user={selectedUser}
+                onClose={() => setShowEditModal(false)}
+            />
         </section>
     )
 }

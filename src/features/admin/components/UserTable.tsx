@@ -2,115 +2,115 @@
 
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { theme } from '@/constants/theme'
-import { Trash2, UserMinus, UserCheck, Phone } from 'lucide-react'
-
-interface User {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    phoneNumber?: string
-    role: string
-    isBlocked: boolean
-}
+import { Trash2, UserMinus, UserCheck, Phone, Pencil } from 'lucide-react'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import type { User } from '@/types/user'
 
 interface Props {
     users: User[]
     onBlock: (id: string) => void
     onUnblock: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (user: User) => void
 }
 
-export function UserTable({ users, onBlock, onUnblock, onDelete }: Props) {
+export function UserTable({ users, onBlock, onUnblock, onDelete, onEdit }: Props) {
     return (
-        <div className="overflow-x-auto rounded-[9px] border border-border bg-surface shadow-card">
-            <table className="w-full text-sm">
-                <thead className="bg-background border-b border-border text-left">
-                    <tr>
-                        <th className="px-4 py-3">Nom</th>
-                        <th className="px-4 py-3">Email</th>
-                        <th className="px-4 py-3">Téléphone</th>
-                        <th className="px-4 py-3">Rôle</th>
-                        <th className="px-4 py-3">Statut</th>
-                        <th className="px-4 py-3 text-right">Actions</th>
-                    </tr>
-                </thead>
+        <div className="w-full">
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Nom</TableHead>
+                        <TableHead>Email</TableHead>
+                        <TableHead>Téléphone</TableHead>
+                        <TableHead>Rôle</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
 
-                <tbody>
+                <TableBody>
                     {users.length === 0 ? (
-                        <tr>
-                            <td colSpan={6} className="text-center py-6 text-text-secondary">
+                        <TableRow>
+                            <TableCell colSpan={6} className="text-center py-6 text-text-secondary">
                                 Aucun utilisateur trouvé.
-                            </td>
-                        </tr>
+                            </TableCell>
+                        </TableRow>
                     ) : (
                         users.map((user) => (
-                            <tr
-                                key={user.id}
-                                className="border-b border-border hover:bg-background/60 transition-colors"
-                            >
-                                <td className="px-4 py-3 font-medium">
+                            <TableRow key={user.id}>
+                                <TableCell className="font-medium text-text">
                                     {user.firstName} {user.lastName}
-                                </td>
-                                <td className="px-4 py-3">{user.email}</td>
-                                <td className="px-4 py-3 flex items-center gap-1">
-                                    <Phone className="w-4 h-4 text-primary" />
-                                    {user.phoneNumber || '—'}
-                                </td>
-                                <td className="px-4 py-3 capitalize">{user.role}</td>
-                                <td className="px-4 py-3">
+                                </TableCell>
+                                <TableCell className="text-text-secondary">{user.email}</TableCell>
+                                <TableCell className="text-text-secondary">
+                                    <span className="inline-flex items-center gap-1">
+                                        <Phone className="w-4 h-4 text-primary" />
+                                        {user.phoneNumber || '—'}
+                                    </span>
+                                </TableCell>
+                                <TableCell className="capitalize text-text-secondary">{user.role}</TableCell>
+                                <TableCell>
                                     <Badge
-                                        style={{
-                                            backgroundColor: user.isBlocked
-                                                ? theme.colors.danger
-                                                : theme.colors.success,
-                                            color: 'white',
-                                        }}
+                                        className={`rounded-[9px] ${
+                                            user.isBlocked ? 'bg-danger/10 text-danger' : 'bg-success/10 text-success'
+                                        }`}
                                     >
                                         {user.isBlocked ? 'Bloqué' : 'Actif'}
                                     </Badge>
-                                </td>
-                                <td className="px-4 py-3 text-right flex justify-end gap-2">
-                                    {/* Supprimer */}
-                                    <Button
-                                        variant="outline"
-                                        size="icon"
-                                        className="hover:text-danger"
-                                        onClick={() => onDelete(user.id)}
-                                        title="Supprimer"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                    </Button>
+                                </TableCell>
+                                <TableCell className="text-right">
+                                    <div className="flex justify-end gap-2">
+                                        {/* Modifier */}
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
+                                            onClick={() => onEdit(user)}
+                                            title="Modifier"
+                                        >
+                                            <Pencil className="w-4 h-4" />
+                                        </Button>
+                                        {/* Supprimer */}
+                                        <Button
+                                            variant="outline"
+                                            size="icon"
+                                            className="rounded-[9px] text-danger hover:text-danger/90 hover:bg-danger/10"
+                                            onClick={() => onDelete(user.id)}
+                                            title="Supprimer"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </Button>
 
-                                    {/* Bloquer / Débloquer */}
-                                    {user.isBlocked ? (
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="text-success hover:text-success/80"
-                                            onClick={() => onUnblock(user.id)}
-                                            title="Débloquer"
-                                        >
-                                            <UserCheck className="w-4 h-4" />
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            variant="outline"
-                                            size="icon"
-                                            className="text-danger hover:text-danger/80"
-                                            onClick={() => onBlock(user.id)}
-                                            title="Bloquer"
-                                        >
-                                            <UserMinus className="w-4 h-4" />
-                                        </Button>
-                                    )}
-                                </td>
-                            </tr>
+                                        {/* Bloquer / Débloquer */}
+                                        {user.isBlocked ? (
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="rounded-[9px] text-success hover:text-success/90 hover:bg-success/10"
+                                                onClick={() => onUnblock(user.id)}
+                                                title="Débloquer"
+                                            >
+                                                <UserCheck className="w-4 h-4" />
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="outline"
+                                                size="icon"
+                                                className="rounded-[9px] text-danger hover:text-danger/90 hover:bg-danger/10"
+                                                onClick={() => onBlock(user.id)}
+                                                title="Bloquer"
+                                            >
+                                                <UserMinus className="w-4 h-4" />
+                                            </Button>
+                                        )}
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ))
                     )}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     )
 }

@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Download } from 'lucide-react'
 import { typography } from '@/constants/theme'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { formatDate } from '@/utils/date'
 
 export default function PaymentHistory() {
     const { data: vouchers, isLoading } = usePayments()
@@ -42,55 +44,46 @@ export default function PaymentHistory() {
     return (
         <section className="bg-surface border border-border rounded-[9px] shadow-card p-6">
             <h2 className={`${typography.h2} mb-4`}>Historique des paiements</h2>
-            <div className="overflow-x-auto">
-                <table className="min-w-full text-sm">
-                    <thead className="bg-background border-b border-border">
-                        <tr>
-                            <th className="p-3 text-left">Référence</th>
-                            <th className="p-3 text-left">Montant</th>
-                            <th className="p-3 text-left">Durée</th>
-                            <th className="p-3 text-left">Statut</th>
-                            <th className="p-3 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {vouchers?.map((v) => (
-                            <tr
-                                key={v.id}
-                                className="border-b border-border hover:bg-gray-50 dark:hover:bg-darkSurface transition"
-                            >
-                                <td className="p-3">{v.reference_code}</td>
-                                <td className="p-3 font-semibold">{v.amount} USD</td>
-                                <td className="p-3">{v.duration ?? '—'} mois</td>
-                                <td className="p-3">
-                                    <Badge
-                                        variant="secondary"
-                                        className={`${getBadgeStyle(v.status)} capitalize`}
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Référence</TableHead>
+                        <TableHead>Montant</TableHead>
+                        <TableHead>Durée</TableHead>
+                        <TableHead>Statut</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {vouchers?.map((v) => (
+                        <TableRow key={v.id}>
+                            <TableCell className="text-text">{v.reference_code}</TableCell>
+                            <TableCell className="font-semibold text-text-secondary">{v.amount} USD</TableCell>
+                            <TableCell className="text-text-secondary">{v.duration ?? '—'} mois</TableCell>
+                            <TableCell>
+                                <Badge variant="secondary" className={`${getBadgeStyle(v.status)} capitalize`}>
+                                    {translateStatus(v.status)}
+                                </Badge>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                {v.status?.toLowerCase() === 'paye' && (
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="inline-flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
+                                        onClick={() =>
+                                            window.open(`/api/payments/vouchers/${v.id}/receipt`)
+                                        }
                                     >
-                                        {translateStatus(v.status)}
-                                    </Badge>
-                                </td>
-                                <td className="p-3 text-center">
-                                    {v.status?.toLowerCase() === 'paye' && (
-                                        <Button
-                                            variant="outline"
-                                            size="sm"
-                                            className="text-primary border-primary hover:bg-primary hover:text-white"
-                                            onClick={() =>
-                                                window.open(
-                                                    `/api/payments/vouchers/${v.id}/receipt`,
-                                                )
-                                            }
-                                        >
-                                            <Download size={16} />
-                                        </Button>
-                                    )}
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                                        <Download size={16} />
+                                        Télécharger
+                                    </Button>
+                                )}
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
         </section>
     )
 }

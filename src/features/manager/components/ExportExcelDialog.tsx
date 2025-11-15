@@ -13,8 +13,9 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Loader2, Download } from 'lucide-react'
+import { Loader2, Download, FileSpreadsheet } from 'lucide-react'
 import { toast } from 'sonner'
+import { ExportButtonUPN } from '@/components/ui/ExportButtonUPN'
 
 interface ExportExcelDialogProps {
     title: string
@@ -71,10 +72,11 @@ export function ExportExcelDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                    <Download className="w-4 h-4" />
-                    {triggerLabel}
-                </Button>
+                <ExportButtonUPN
+                    variant="solid"
+                    label={triggerLabel}
+                    leftIcon={<FileSpreadsheet width={18} height={18} />}
+                />
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
@@ -108,19 +110,18 @@ export function ExportExcelDialog({
                     <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
                         Annuler
                     </Button>
-                    <Button onClick={handleExport} disabled={loading}>
-                        {loading ? (
-                            <>
+                    <ExportButtonUPN
+                        onClick={handleExport}
+                        disabled={loading}
+                        label={loading ? 'Export en cours...' : 'Exporter'}
+                        leftIcon={
+                            loading ? (
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                                Export en cours...
-                            </>
-                        ) : (
-                            <>
+                            ) : (
                                 <Download className="w-4 h-4 mr-2" />
-                                Exporter
-                            </>
-                        )}
-                    </Button>
+                            )
+                        }
+                    />
                 </DialogFooter>
             </DialogContent>
         </Dialog>

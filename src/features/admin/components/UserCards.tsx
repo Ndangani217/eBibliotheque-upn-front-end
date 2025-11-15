@@ -5,26 +5,18 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ConfirmDialog } from '@/components/ui/confirmDialog'
 import { theme } from '@/constants/theme'
-import { Trash2, UserMinus, UserCheck, Mail, Shield, Phone } from 'lucide-react'
-
-interface User {
-    id: string
-    firstName: string
-    lastName: string
-    email: string
-    phoneNumber: string
-    role: string
-    isBlocked: boolean
-}
+import { Trash2, UserMinus, UserCheck, Mail, Shield, Phone, Pencil } from 'lucide-react'
+import type { User } from '@/types/user'
 
 interface Props {
     users: User[]
     onBlock: (id: string) => void
     onUnblock: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (user: User) => void
 }
 
-export function UserCards({ users, onBlock, onUnblock, onDelete }: Props) {
+export function UserCards({ users, onBlock, onUnblock, onDelete, onEdit }: Props) {
     const [confirm, setConfirm] = useState<{
         open: boolean
         action?: 'delete' | 'block' | 'unblock'
@@ -92,6 +84,15 @@ export function UserCards({ users, onBlock, onUnblock, onDelete }: Props) {
                         </div>
 
                         <div className="flex justify-end gap-2">
+                            <Button
+                                variant="outline"
+                                size="icon"
+                                className="border-border rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
+                                onClick={() => onEdit(user)}
+                                title="Modifier"
+                            >
+                                <Pencil className="w-4 h-4" />
+                            </Button>
                             <Button
                                 variant="outline"
                                 size="icon"

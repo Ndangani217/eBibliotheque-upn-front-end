@@ -267,7 +267,7 @@ export default function SubscriptionCards() {
                             <p className="text-sm">
                                 Le bon généré le{' '}
                                 <strong>{formatDate(activeVoucher.createdAt)}</strong> a expiré le{' '}
-                                <strong>{formatDate(activeVoucher.expiresAt)}</strong>.
+                                <strong>{formatDate(activeVoucher.expiresAt || undefined)}</strong>.
                             </p>
                             <p className="text-sm mt-1 font-medium">
                                 Vous pouvez en générer un nouveau maintenant.

@@ -9,9 +9,10 @@ interface Props {
     onBlock: (id: string) => void
     onUnblock: (id: string) => void
     onDelete: (id: string) => void
+    onEdit: (user: User) => void
 }
 
-export function UserListResponsive({ users, onBlock, onUnblock, onDelete }: Props) {
+export function UserListResponsive({ users, onBlock, onUnblock, onDelete, onEdit }: Props) {
     return (
         <div>
             {/* 🖥️ Vue Desktop : tableau visible à partir de 768px */}
@@ -21,6 +22,7 @@ export function UserListResponsive({ users, onBlock, onUnblock, onDelete }: Prop
                     onBlock={onBlock}
                     onUnblock={onUnblock}
                     onDelete={onDelete}
+                    onEdit={onEdit}
                 />
             </div>
 
@@ -31,6 +33,7 @@ export function UserListResponsive({ users, onBlock, onUnblock, onDelete }: Prop
                     onBlock={onBlock}
                     onUnblock={onUnblock}
                     onDelete={onDelete}
+                    onEdit={onEdit}
                 />
             </div>
         </div>

@@ -2,14 +2,22 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, CreditCard, Users, BookOpen, CheckCircle, Settings, X } from 'lucide-react'
+import { Home, CreditCard, Users, BookOpen, CheckCircle, Settings, X, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import { useAuthStore } from '@/features/auth'
 import { UserRole } from '@/types/user'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 
-export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
+export default function Sidebar({
+    onLinkClick,
+    collapsed = false,
+    onToggleCollapse,
+}: {
+    onLinkClick?: () => void
+    collapsed?: boolean
+    onToggleCollapse?: () => void
+}) {
     const pathname = usePathname()
     const { user } = useAuthStore()
 
@@ -52,20 +60,26 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
     }
 
     return (
-        <aside className="flex flex-col bg-surface border-r border-border h-screen w-64 fixed top-0 left-0 z-[70] shadow-card">
+        <aside
+            className={`flex flex-col bg-surface border-r border-border h-screen fixed top-0 left-0 z-[70] shadow-card transition-all duration-300 ${
+                collapsed ? 'w-16' : 'w-64'
+            }`}
+        >
             {/* ======= En-tête du menu ======= */}
-            <div className="flex items-center justify-between gap-2 h-16 border-b border-border bg-surface shadow-sm px-4">
-                <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between gap-2 h-16 border-b border-border bg-surface shadow-sm px-3">
+                <div className={`flex items-center gap-2 ${collapsed ? 'justify-center w-full' : ''}`}>
                     <Image
                         src="/logo.png"
-                        width={36}
-                        height={36}
+                        width={collapsed ? 28 : 36}
+                        height={collapsed ? 28 : 36}
                         alt="UPN Logo"
-                        className="rounded-full"
+                        className=""
                     />
-                    <span className="text-primary font-bold text-lg tracking-tight">
-                        eBibliothèque
-                    </span>
+                    {!collapsed && (
+                        <span className="text-primary font-bold text-lg tracking-tight">
+                            eBibliothèque
+                        </span>
+                    )}
                 </div>
 
                 {/* Bouton animé pour fermer sur mobile */}
@@ -85,6 +99,16 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
                         <X className="w-5 h-5" />
                     </Button>
                 </motion.div>
+                {/* Toggle collapse (desktop) */}
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    className="hidden lg:flex text-text hover:text-primary"
+                    onClick={onToggleCollapse}
+                    aria-label={collapsed ? 'Étendre le menu' : 'Réduire le menu'}
+                >
+                    {collapsed ? <ChevronsRight className="w-5 h-5" /> : <ChevronsLeft className="w-5 h-5" />}
+                </Button>
             </div>
 
             {/* ======= Navigation ======= */}
@@ -96,14 +120,14 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
                             key={href}
                             href={href}
                             onClick={onLinkClick}
-                            className={`flex items-center gap-3 px-4 py-2 rounded-[9px] mx-2 transition-all duration-150 ${
+                            className={`flex items-center gap-3 px-3 py-2 mx-2 transition-all duration-150 ${
                                 isActive
                                     ? 'bg-primary/10 text-primary font-semibold'
                                     : 'text-text hover:bg-primary/5 hover:text-primary'
                             }`}
                         >
                             <Icon className="w-5 h-5 shrink-0" />
-                            <span className="truncate">{label}</span>
+                            {!collapsed && <span className="truncate">{label}</span>}
                         </Link>
                     )
                 })}
@@ -112,7 +136,7 @@ export default function Sidebar({ onLinkClick }: { onLinkClick?: () => void }) {
             {/* ======= Bas du menu ======= */}
             <div className="border-t border-border bg-surface p-4 text-sm text-text-secondary flex items-center gap-2 hover:text-primary cursor-pointer transition-colors">
                 <Settings className="w-4 h-4" />
-                Mon profil
+                {!collapsed && 'Mon profil'}
             </div>
         </aside>
     )

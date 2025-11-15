@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Loader2, AlertTriangle, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Loader2, AlertTriangle } from 'lucide-react'
 import {
     useSubscribers,
     useBlockSubscriber,
@@ -14,6 +14,8 @@ import { SubscriberListResponsive } from '../components/subscribers/SubscriberLi
 import { EditEmailModal } from '../components/subscribers/EditEmailModal'
 import { Button } from '@/components/ui/button'
 import type { User } from '@/types/user'
+import { ConfirmActionModal } from '@/components/ui/ConfirmActionModal'
+import NumberedPagination from '@/components/ui/NumberedPagination'
 
 export default function SubscribersPage() {
     const [search, setSearch] = useState('')
@@ -40,16 +42,26 @@ export default function SubscribersPage() {
         await updateEmailMutation.mutateAsync({ id, email })
     }
 
-    const handleBlock = (id: string) => {
-        if (confirm('Êtes-vous sûr de vouloir bloquer cet abonné ?')) {
-            blockMutation.mutate(id)
-        }
-    }
+    const [confirmState, setConfirmState] = useState<{ open: boolean; type: 'block' | 'unblock'; id: string | null }>({
+        open: false,
+        type: 'block',
+        id: null,
+    })
 
-    const handleUnblock = (id: string) => {
-        if (confirm('Êtes-vous sûr de vouloir débloquer cet abonné ?')) {
-            unblockMutation.mutate(id)
+    const openConfirm = (type: 'block' | 'unblock', id: string) =>
+        setConfirmState({ open: true, type, id })
+
+    const handleBlock = (id: string) => openConfirm('block', id)
+    const handleUnblock = (id: string) => openConfirm('unblock', id)
+
+    const handleConfirm = () => {
+        if (!confirmState.id) return
+        if (confirmState.type === 'block') {
+            blockMutation.mutate(confirmState.id)
+        } else {
+            unblockMutation.mutate(confirmState.id)
         }
+        setConfirmState({ ...confirmState, open: false, id: null })
     }
 
     if (isLoading) {
@@ -72,50 +84,27 @@ export default function SubscribersPage() {
 
     return (
         <section className="space-y-6">
-            <SubscriberTableHeader onSearch={setSearch} />
+            <div className="border border-border bg-surface p-4 md:p-6 space-y-4">
+                <SubscriberTableHeader onSearch={setSearch} />
 
-            <SubscriberListResponsive
-                subscribers={subscribers}
-                onBlock={handleBlock}
-                onUnblock={handleUnblock}
-                onEditEmail={handleEditEmail}
-                onSendPasswordReset={(id) => sendPasswordResetMutation.mutate(id)}
-            />
+                <SubscriberListResponsive
+                    subscribers={subscribers}
+                    onBlock={handleBlock}
+                    onUnblock={handleUnblock}
+                    onEditEmail={handleEditEmail}
+                    onSendPasswordReset={(id) => sendPasswordResetMutation.mutate(id)}
+                />
 
-            {/* Pagination */}
-            {meta && meta.total > limit && (
-                <div className="flex items-center justify-between border-t border-border pt-4">
-                    <p className="text-sm text-text-secondary">
-                        Affichage de {(page - 1) * limit + 1} à{' '}
-                        {Math.min(page * limit, meta.total)} sur {meta.total} abonnés
-                    </p>
-                    <div className="flex items-center gap-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setPage((p) => Math.max(1, p - 1))}
-                            disabled={page === 1}
-                            className="rounded-[9px] flex items-center gap-1"
-                        >
-                            <ChevronLeft className="w-4 h-4" />
-                            Précédent
-                        </Button>
-                        <span className="text-sm text-text-secondary px-2">
-                            Page {page} sur {meta.lastPage}
-                        </span>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setPage((p) => Math.min(meta.lastPage, p + 1))}
-                            disabled={page === meta.lastPage}
-                            className="rounded-[9px] flex items-center gap-1"
-                        >
-                            Suivant
-                            <ChevronRight className="w-4 h-4" />
-                        </Button>
+                {meta && meta.lastPage >= 1 && (
+                    <div className="py-3 flex justify-center">
+                        <NumberedPagination
+                            currentPage={meta.currentPage ?? page}
+                            totalPages={meta.lastPage}
+                            onPageChange={setPage}
+                        />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
 
             {/* Modal de modification d'email */}
             <EditEmailModal
@@ -126,6 +115,20 @@ export default function SubscribersPage() {
                     setSelectedSubscriber(null)
                 }}
                 onSave={handleSaveEmail}
+            />
+
+            <ConfirmActionModal
+                open={confirmState.open}
+                onCancel={() => setConfirmState({ ...confirmState, open: false })}
+                onConfirm={handleConfirm}
+                title={confirmState.type === 'block' ? "Bloquer l'utilisateur ?" : "Débloquer l'utilisateur ?"}
+                description={
+                    confirmState.type === 'block'
+                        ? "Cet abonné ne pourra plus accéder à son compte."
+                        : "L'abonné pourra se reconnecter normalement."
+                }
+                confirmLabel={confirmState.type === 'block' ? 'Confirmer le blocage' : 'Confirmer'}
+                danger={confirmState.type === 'block'}
             />
         </section>
     )

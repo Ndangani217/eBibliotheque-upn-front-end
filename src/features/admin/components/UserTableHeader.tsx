@@ -50,11 +50,11 @@ export function UserTableHeader({ onAdd, onSearch }: Props) {
 
                 {/* Bouton Ajouter */}
                 <Button
-                    className="flex items-center gap-2"
-                    style={{ backgroundColor: theme.colors.primary, color: theme.colors.surface }}
                     onClick={onAdd}
+                    className="flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-surface font-medium rounded-[9px] py-2 shadow-button transition-all duration-200"
                 >
-                    <Plus className="w-4 h-4" /> Ajouter
+                    <Plus className="w-4 h-4" />
+                    Ajouter
                 </Button>
             </div>
         </header>

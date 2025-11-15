@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 export default function LayoutDashboard({ children }: { children: React.ReactNode }) {
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [isMobile, setIsMobile] = useState(false)
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
     //Détection du mode mobile
     useEffect(() => {
@@ -20,7 +21,12 @@ export default function LayoutDashboard({ children }: { children: React.ReactNod
     return (
         <div className="flex min-h-screen bg-background text-text transition-colors duration-300">
             {/* Sidebar desktop */}
-            {!isMobile && <Sidebar />}
+            {!isMobile && (
+                <Sidebar
+                    collapsed={sidebarCollapsed}
+                    onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
+                />
+            )}
 
             {/* Drawer mobile */}
             <AnimatePresence>
@@ -55,9 +61,13 @@ export default function LayoutDashboard({ children }: { children: React.ReactNod
             </AnimatePresence>
 
             {/* Contenu principal */}
-            <div className="flex-1 flex flex-col lg:ml-64 transition-all duration-300">
+            <div
+                className={`flex-1 flex flex-col transition-all duration-300 ${
+                    isMobile ? '' : sidebarCollapsed ? 'lg:ml-16' : 'lg:ml-64'
+                }`}
+            >
                 <Header onMenuClick={() => setDrawerOpen(true)} />
-                <main className="flex-1 p-4 sm:p-6 md:p-8 bg-surface rounded-t-xl shadow-inner transition-all duration-300">
+                <main className="flex-1 p-4 sm:p-6 md:p-8 bg-surface shadow-inner transition-all duration-300">
                     {children}
                 </main>
                 <footer className="text-center py-4 text-sm text-text-secondary border-t border-border bg-surface">

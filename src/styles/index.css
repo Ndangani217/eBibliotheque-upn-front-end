@@ -24,6 +24,17 @@ body {
     transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+/* Augmenter la taille de police et des icônes sur desktop */
+@media (min-width: 1024px) {
+    html {
+        font-size: 17.5px; /* léger boost global */
+    }
+    .lucide {
+        width: 1.15em !important;
+        height: 1.15em !important;
+    }
+}
+
 /* ==========================
    COULEURS & FOND GLOBAL
    ========================== */
@@ -35,6 +46,11 @@ body {
 
     * {
         border-color: var(--border);
+    }
+
+    /* Suppression globale des arrondis pour un rendu plus sobre */
+    * {
+        border-radius: 0 !important;
     }
 }
 

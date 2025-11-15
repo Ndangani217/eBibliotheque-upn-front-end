@@ -1,18 +1,12 @@
 'use client'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from '@/components/ui/table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { Loader2, CheckCircle, Clock, Check, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Loader2, CheckCircle, Clock, Check } from 'lucide-react'
 import type { Payment, PaginationMeta } from '@/features/manager/hooks/useManagerPayments'
 import NumberedPagination from '@/components/ui/NumberedPagination'
+import { formatDate } from '@/utils/date'
 
 interface Props {
     payments?: Payment[]
@@ -52,9 +46,9 @@ export function PaymentList({
     return (
         <div className="w-full">
             {/* TABLE DESKTOP */}
-            <div className="hidden md:block rounded-[9px] border border-border bg-card">
+            <div className="hidden md:block">
                 <Table>
-                    <TableHeader className="bg-muted/50">
+                    <TableHeader>
                         <TableRow>
                             <TableHead>Référence</TableHead>
                             <TableHead>Abonné</TableHead>
@@ -62,38 +56,38 @@ export function PaymentList({
                             <TableHead>Montant</TableHead>
                             <TableHead>Statut</TableHead>
                             <TableHead>Date</TableHead>
-                            {onValidate && <TableHead>Action</TableHead>}
+                            {onValidate && <TableHead className="text-right">Actions</TableHead>}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {payments.map((p) => (
                             <TableRow key={p.id}>
-                                <TableCell className="font-medium">{p.referenceCode}</TableCell>
-                                <TableCell>{p.subscriberName}</TableCell>
-                                <TableCell className="capitalize">{p.category ?? '—'}</TableCell>
-                                <TableCell>{p.amount} USD</TableCell>
+                                <TableCell className="font-medium text-text">{p.referenceCode}</TableCell>
+                                <TableCell className="text-text">{p.subscriberName}</TableCell>
+                                <TableCell className="capitalize text-text-secondary">{p.category ?? '—'}</TableCell>
+                                <TableCell className="text-text-secondary">{p.amount} USD</TableCell>
                                 <TableCell>
                                     {p.status === 'paye' ? (
-                                        <span className="text-green-600 font-medium flex items-center gap-1">
+                                        <span className="text-success font-medium flex items-center gap-1">
                                             <CheckCircle className="w-4 h-4" /> Payé
                                         </span>
                                     ) : (
-                                        <span className="text-yellow-600 font-medium flex items-center gap-1">
+                                        <span className="text-warning-600 font-medium flex items-center gap-1">
                                             <Clock className="w-4 h-4" /> En attente
                                         </span>
                                     )}
                                 </TableCell>
-                                <TableCell>
-                                    {new Date(p.createdAt).toLocaleDateString('fr-FR')}
+                                <TableCell className="text-text-secondary">
+                                    {formatDate(p.createdAt)}
                                 </TableCell>
                                 {onValidate && (
-                                    <TableCell>
+                                    <TableCell className="text-right">
                                         <Button
                                             size="sm"
                                             disabled={validating}
                                             onClick={() => onValidate(p.id)}
                                             variant="outline"
-                                            className="flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
+                                            className="inline-flex items-center gap-2 rounded-[9px] text-primary hover:text-primary-dark hover:bg-primary/10"
                                         >
                                             {validating ? (
                                                 <>
@@ -113,8 +107,6 @@ export function PaymentList({
                         ))}
                     </TableBody>
                 </Table>
-
-                
             </div>
 
             {/* 📱 CARTES MOBILE */}
