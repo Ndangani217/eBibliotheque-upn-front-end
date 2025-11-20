@@ -1,0 +1,137 @@
+/* ==========================
+   IMPORTS & LAYERS
+   ========================== */
+
+/*Variables globales du thème UPN */
+@import './theme.css';
+
+/* Directives Tailwind */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================
+   STYLES GLOBAUX
+   ========================== */
+
+html,
+body {
+    height: 100%;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-family: var(--font-sans, 'Inter', 'Roboto', sans-serif);
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Augmenter la taille de police et des icônes sur desktop */
+@media (min-width: 1024px) {
+    html {
+        font-size: 17.5px; /* léger boost global */
+    }
+    .lucide {
+        width: 1.15em !important;
+        height: 1.15em !important;
+    }
+}
+
+/* ==========================
+   COULEURS & FOND GLOBAL
+   ========================== */
+@layer base {
+    body {
+        background-color: var(--background);
+        color: var(--text);
+    }
+
+    * {
+        border-color: var(--border);
+    }
+
+    /* Suppression globale des arrondis pour un rendu plus sobre */
+    * {
+        border-radius: 0 !important;
+    }
+}
+
+/* ==========================
+   INPUTS & FORMULAIRES
+   ========================== */
+@layer components {
+    .form-input {
+        @apply border border-border rounded-[9px] p-2 w-full focus:ring-2 focus:ring-primary transition-all duration-200;
+    }
+
+    .form-input-error {
+        @apply border-danger focus:ring-danger;
+    }
+
+    .form-select {
+        @apply border border-border rounded-[9px] p-2 w-full focus:ring-2 focus:ring-primary transition-all duration-200;
+    }
+
+    .form-button {
+        @apply w-full font-semibold py-2 text-white rounded-[9px] shadow-button transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed;
+        background-color: var(--color-primary-dark);
+    }
+
+    .form-button:hover {
+        filter: brightness(1.05);
+    }
+}
+
+/* ==========================
+   SCROLLBAR
+   ========================== */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary);
+}
+
+/* ==========================
+   SÉLECTION DU TEXTE
+   ========================== */
+::selection {
+    background-color: var(--color-primary);
+    color: #ffffff;
+}
+
+/* ==========================
+   LIENS ET MÉDIAS
+   ========================== */
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--color-primary-dark);
+}
+
+img,
+video {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ==========================
+   UTILITAIRES
+   ========================== */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
