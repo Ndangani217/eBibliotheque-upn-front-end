@@ -1,0 +1,21 @@
+{
+    "name": "Bibliothèque UPN",
+    "short_name": "UPN Bibliothèque",
+    "description": "Application de gestion des abonnements et utilisateurs de la bibliothèque UPN",
+    "icons": [
+        {
+            "src": "/logo-upn.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon.ico",
+            "sizes": "32x32",
+            "type": "image/x-icon"
+        }
+    ],
+    "theme_color": "#0033CC",
+    "background_color": "#F9FAFB",
+    "display": "standalone",
+    "start_url": "/"
+}
