@@ -45,9 +45,7 @@ async function fetchAllPages<T>(url: string, pageKey: 'current_page' | 'currentP
 	const maxPages = 10 // garde‑fou
 	const items: T[] = []
 
-	// eslint-disable-next-line no-constant-condition
 	while (true) {
-		// eslint-disable-next-line no-await-in-loop
 		const { data } = await api.get(url.includes('?') ? `${url}&page=${page}` : `${url}?page=${page}`)
 		const batch: T[] = data?.data ?? []
 		items.push(...batch)

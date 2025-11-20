@@ -42,6 +42,10 @@ export default function ManagerDashboardPage() {
         validatedPayments: 0,
     }
 
+	// Les hooks doivent être appelés avant tout return conditionnel
+	const { data: charts } = useDashboardCharts()
+	const { data: logs } = useActivityLogs(1, 5)
+
     if (isError) {
         return (
             <div className="flex flex-col items-center justify-center py-20 text-danger">
@@ -50,9 +54,6 @@ export default function ManagerDashboardPage() {
             </div>
         )
     }
-
-	const { data: charts } = useDashboardCharts()
-	const { data: logs } = useActivityLogs(1, 5)
 
 	return (
 		<section className="space-y-6">

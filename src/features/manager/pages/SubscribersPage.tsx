@@ -12,7 +12,6 @@ import {
 import { SubscriberTableHeader } from '../components/subscribers/SubscriberTableHeader'
 import { SubscriberListResponsive } from '../components/subscribers/SubscriberListResponsive'
 import { EditEmailModal } from '../components/subscribers/EditEmailModal'
-import { Button } from '@/components/ui/button'
 import type { User } from '@/types/user'
 import { ConfirmActionModal } from '@/components/ui/ConfirmActionModal'
 import NumberedPagination from '@/components/ui/NumberedPagination'
@@ -146,13 +145,6 @@ export default function SubscribersPage() {
                         : 'Envoyer le lien'
                 }
                 danger={confirmState.type === 'block'}
-                confirmLoading={
-                    confirmState.type === 'block'
-                        ? blockMutation.isPending
-                        : confirmState.type === 'unblock'
-                        ? unblockMutation.isPending
-                        : sendPasswordResetMutation.isPending
-                }
             />
         </section>
     )

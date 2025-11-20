@@ -14,12 +14,19 @@ export interface ActivityLog {
 	createdAt: string
 }
 
+interface ActivityLogsMeta {
+	page: number
+	limit: number
+	total: number
+	totalPages: number
+}
+
 export function useActivityLogs(page = 1, limit = 5) {
 	return useQuery({
 		queryKey: ['activity-logs', page, limit],
 		queryFn: async () => {
 			const res = await api.get('/manager/activity-logs', { params: { page, limit } })
-			return res.data as { data: ActivityLog[]; meta: any }
+			return res.data as { data: ActivityLog[]; meta: ActivityLogsMeta }
 		},
 	})
 }

@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge'
 import { Download } from 'lucide-react'
 import { typography } from '@/constants/theme'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { formatDate } from '@/utils/date'
 
 export default function PaymentHistory() {
     const { data: vouchers, isLoading } = usePayments()

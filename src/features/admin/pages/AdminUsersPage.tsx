@@ -89,8 +89,8 @@ export default function AdminUsersPage() {
 			{meta && (
 				<div className="py-3 flex justify-center">
 					<NumberedPagination
-						currentPage={meta.current_page ?? meta.currentPage ?? page}
-						totalPages={meta.last_page ?? meta.lastPage ?? 1}
+						currentPage={meta.currentPage ?? page}
+						totalPages={meta.lastPage ?? 1}
 						onPageChange={setPage}
 					/>
 				</div>
@@ -129,13 +129,6 @@ export default function AdminUsersPage() {
 						: 'Supprimer définitivement'
 				}
 				danger={confirmState.action === 'block' || confirmState.action === 'delete'}
-				confirmLoading={
-					confirmState.action === 'block'
-						? blockMutation.isPending
-						: confirmState.action === 'unblock'
-						? unblockMutation.isPending
-						: deleteMutation.isPending
-				}
 			/>
         </section>
     )
